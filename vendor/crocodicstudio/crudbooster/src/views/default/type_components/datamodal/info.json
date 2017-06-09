@@ -1,0 +1,23 @@
+{
+	"title":"Data Modal",
+	"type":"datamodal",
+	"attribute":{		
+		"required":{
+			"datamodal_table":"table name",
+			"datamodal_columns":"column name, sparate with comma",
+			"datamodal_columns_alias":"Column name Alias , sparate with comma ex: 'Name Surname','Age' ",			
+			"datamodal_size":{
+				"type":"radio",
+				"enum":["large","small"]
+			}			
+		},
+		"optional": {			
+			"datamodal_where":"string where condition",		
+			"datamodal_module_path":"Module name",	
+			"style":"string inline stylesheet",
+			"help":"string help-block",
+			"datamodal_joins":"Tables to join, separeted with comma ex: sections;sections.id;=;students.section_id,grades;grades.id;=;sections.grade_id,branches;branches.id;=;grades.branch_id"
+		}
+									
+	}
+}

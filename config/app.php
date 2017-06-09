@@ -167,6 +167,7 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+        crocodicstudio\crudbooster\CRUDBoosterServiceProvider::class,
 
         /*
          * Application Service Providers...

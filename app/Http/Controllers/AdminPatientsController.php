@@ -219,8 +219,8 @@
 	        */
 	        $this->load_css = array();
 	        
-	        $this->addaction[] = ['label'=>'New OPD Visit','url'=>CRUDBooster::mainpath('opd-visits/create/[id]'),'icon'=>'fa fa-eye','color'=>'success'];
-			$this->addaction[] = ['label'=>'Admit Patient','url'=>CRUDBooster::mainpath('patient-admissions/create/[id]'),'icon'=>'fa fa-sign-in','color'=>'danger'];
+	        $this->addaction[] = ['label'=>'New OPD Visit','url'=>CRUDBooster::adminPath('opd-visits/create/[id]'),'icon'=>'fa fa-eye','color'=>'success'];
+			$this->addaction[] = ['label'=>'Admit Patient','url'=>CRUDBooster::adminPath('patient-admissions/create/[id]'),'icon'=>'fa fa-sign-in','color'=>'danger'];
 	        
 	    }
 

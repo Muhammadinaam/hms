@@ -5,14 +5,14 @@
 	use DB;
 	use CRUDBooster;
 
-	class AdminPatientsController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminOpdVisitsController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
 			# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->title_field = "name";
+			$this->title_field = "id";
 			$this->limit = "20";
-			$this->orderby = "name,asc";
+			$this->orderby = "id,desc";
 			$this->global_privilege = false;
 			$this->button_table_action = true;
 			$this->button_bulk_action = true;
@@ -20,45 +20,38 @@
 			$this->button_add = true;
 			$this->button_edit = true;
 			$this->button_delete = true;
-			$this->button_detail = false;
-			$this->button_show = false;
+			$this->button_detail = true;
+			$this->button_show = true;
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "patients";
+			$this->table = "opd_visits";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Name","name"=>"name"];
-			$this->col[] = ["label"=>"Guardian Name","name"=>"guardian_name"];
-			$this->col[] = ["label"=>"Gender","name"=>"gender"];
-			$this->col[] = ["label"=>"CNIC","name"=>"cnic"];
-			$this->col[] = ["label"=>"Phone","name"=>"phone"];
-			$this->col[] = ["label"=>"Address","name"=>"address"];
-			$this->col[] = ["label"=>"Age (Years)","name"=>"age","callback_php"=>'\Carbon\Carbon::now()->diffInYears(\Carbon\Carbon::parse($row->created_at)) + $row->age'];
+			$this->col[] = ["label"=>"Doctor","name"=>"doctor_id","join"=>"doctors,name"];
+			$this->col[] = ["label"=>"Patient","name"=>"patient_id","join"=>"patients,name"];
+			$this->col[] = ["label"=>"Token Number","name"=>"token_number"];
+			$this->col[] = ["label"=>"Date Of Visit","name"=>"date_of_visit"];
+			$this->col[] = ["label"=>"Doctor Fee","name"=>"doctor_fee"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-			$this->form[] = ['label'=>'Guardian Name','name'=>'guardian_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Gender','name'=>'gender','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-10','dataenum'=>'Male;Female;Other'];
-			$this->form[] = ['label'=>'CNIC / Passport','name'=>'cnic','type'=>'number','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Phone','name'=>'phone','type'=>'number','validation'=>'required|numeric','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Address','name'=>'address','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Age (Years)','name'=>'age','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Doctor','name'=>'doctor_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'doctors','datamodal_columns'=>'name,qualification,opd_current_token_number,opd_fee','datamodal_columns_alias'=>'Name,Qualification,Token Number,Fee','datamodal_size'=>'large', 'datamodal_select_to'=>'opd_fee:doctor_fee,opd_current_token_number:token_number'];
+			$this->form[] = ['label'=>'Patient','name'=>'patient_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'patients','datamodal_columns'=>'name,guardian_name,cnic,phone,address','datamodal_columns_alias'=>'Name,Guardian Name,CNIC,Phone,Address','datamodal_size'=>'large'];
+			$this->form[] = ['label'=>'Token Number','name'=>'token_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Doctor Fee','name'=>'doctor_fee','type'=>'number','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-			//$this->form[] = ['label'=>'Guardian Name','name'=>'guardian_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Gender','name'=>'gender','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-10','dataenum'=>'Male;Female;Other'];
-			//$this->form[] = ['label'=>'CNIC / Passport','name'=>'cnic','type'=>'number','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Phone','name'=>'phone','type'=>'number','validation'=>'required|numeric','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Address','name'=>'address','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Age (Years)','name'=>'age','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Doctor','name'=>'doctor_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'doctors','datamodal_columns'=>'name,qualification,opd_fee','datamodal_columns_alias'=>'Name,Qualification,Fee','datamodal_size'=>'large'];
+			//$this->form[] = ['label'=>'Patient','name'=>'patient_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'patients','datamodal_columns'=>'name,guardian_name,cnic,phone,address','datamodal_columns_alias'=>'Name,Guardian Name,CNIC,Phone,Address','datamodal_size'=>'large'];
+			//$this->form[] = ['label'=>'Token Number','name'=>'token_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Date Of Visit','name'=>'date_of_visit','type'=>'datetime','validation'=>'required|date_format:Y-m-d H:i:s','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'Doctor Fee','name'=>'doctor_fee','type'=>'number','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true'];
 			# OLD END FORM
 
 			/* 
@@ -219,8 +212,6 @@
 	        */
 	        $this->load_css = array();
 	        
-	        $this->addaction[] = ['label'=>'New OPD Visit','url'=>CRUDBooster::adminPath('opd_visits/add?patient_id=[id]'),'icon'=>'fa fa-eye','color'=>'success'];
-			// $this->addaction[] = ['label'=>'Admit Patient','url'=>CRUDBooster::adminPath('patient-admissions/create/[id]'),'icon'=>'fa fa-sign-in','color'=>'danger'];
 	        
 	    }
 
@@ -248,7 +239,7 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-	        $query->addSelect('created_at');
+	            
 	    }
 
 	    /*
@@ -270,7 +261,7 @@
 	    */
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
-
+	    	$postdata['date_of_visit'] = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
 	    }
 
 	    /* 
@@ -337,5 +328,32 @@
 
 
 	    //By the way, you can still create your own method in here... :) 
-	    
+
+	    public function getAdd(){
+			$this->cbLoader();
+			if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {
+				CRUDBooster::insertLog(trans('crudbooster.log_try_add',['module'=>CRUDBooster::getCurrentModule()->name ]));
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+			}
+
+			$page_title      = trans("crudbooster.add_data_page_title",['module'=>CRUDBooster::getCurrentModule()->name]);
+			//$page_menu       = Route::getCurrentRoute()->getActionName();
+			$command 		 = 'add';
+
+			$patient_id = request()->patient_id;
+
+			$initial_data = array();
+			
+			//$patient_id = '1';
+			if($patient_id != '')
+			{
+				$patient = DB::table('patients')->where('id', $patient_id)->first();
+
+				$initial_data['patient_id'] = [ 'id' => $patient->id, 'display' => $patient->name ];
+			}
+
+			return view('crudbooster::default.form',compact('page_title','page_menu','command', 'initial_data'));
+		}
+
+
 	}

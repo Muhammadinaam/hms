@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['middleware'=>['web','\crocodicstudio\crudbooster\middlewares\CBBackend'],'prefix'=>config('crudbooster.ADMIN_PATH')], function () {
+				
+	Route::get('opd-visits/create/{id?}', function($id){
+		return $id;
+	});
+
+});

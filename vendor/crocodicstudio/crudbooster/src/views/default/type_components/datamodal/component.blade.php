@@ -10,8 +10,8 @@
 	?>	
 	
 	<div id='{{$name}}' class="input-group">
-	  <input type="hidden" name="{{$name}}" class="input-id" value="{{$value}}">
-      <input type="text" class="form-control input-label {{$required?"required":""}}" {{$required?"required":""}} value="{{$datamodal_value}}" readonly>
+	  <input type="hidden" name="{{$name}}" class="input-id" value="{{ isset($initial_data[$name]['id']) ? $initial_data[$name]['id'] : $value}}">
+      <input type="text" class="form-control input-label {{$required?"required":""}}" {{$required?"required":""}} value="{{ isset($initial_data[$name]) ? $initial_data[$name]['display'] : $datamodal_value}}" readonly>
       <span class="input-group-btn">
         <button class="btn btn-primary" onclick="showModal{{$name}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}}</button>
 			<?php if(strlen($form['datamodal_module_path'])>1){ ?>	
@@ -44,7 +44,7 @@
 			if(key == 'datamodal_label') {
 				$('#{{$name}} .input-label').val(val);
 			}
-			$('#'+key).val(val).trigger('change');			
+			$('#'+key).val(val).trigger('change');	
 		})
 		hideModal{{$name}}();
 	}

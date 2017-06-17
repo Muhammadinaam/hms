@@ -94,7 +94,7 @@
 												if(key == 'datamodal_label') {
 													$('#{{$name_column}} .input-label').val(val);
 												}
-												$('#{{$name}}'+key).val(val).trigger('change');			
+												$('#{{$name}}'+key).val(val).trigger('change');	
 											})
 											hideModal{{$name_column}}();
 										}

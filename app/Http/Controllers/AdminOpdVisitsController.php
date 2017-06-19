@@ -20,7 +20,7 @@
 			$this->button_add = true;
 			$this->button_edit = true;
 			$this->button_delete = true;
-			$this->button_detail = true;
+			$this->button_detail = false;
 			$this->button_show = true;
 			$this->button_filter = true;
 			$this->button_import = false;
@@ -81,6 +81,8 @@
 	        | 
 	        */
 	        $this->addaction = array();
+
+	        $this->addaction[] = ['label'=>'Print','url'=>CRUDBooster::adminPath('opd_visits/[id]/print'),'icon'=>'fa fa-print','color'=>'success'];
 
 
 	        /* 
@@ -262,6 +264,10 @@
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
 	    	$postdata['date_of_visit'] = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
+
+	    	// increase token number of doctor
+	    	DB::table('doctors')->where('id', $postdata['doctor_id'])
+	    				->update(['opd_current_token_number' => $postdata['token_number'] + 1]);
 	    }
 
 	    /* 
@@ -353,6 +359,32 @@
 			}
 
 			return view('crudbooster::default.form',compact('page_title','page_menu','command', 'initial_data'));
+		}
+
+		public function afterPostAddSave($id)
+		{
+			
+			$message = 'Saved Successfully';
+			$type = 'success';
+			$to = CRUDBooster::adminPath('opd_visits/'. $id . '/print');
+
+			$resp = response()->json(['message'=>$message,'message_type'=>$type,'redirect_url'=>$to])->send();
+			exit;
+		}
+
+		public function print_visit($id)
+		{
+			$opd_visit = DB::table('opd_visits')
+						->leftJoin('patients', 'patients.id', '=', 'opd_visits.patient_id')
+						->leftJoin('doctors', 'doctors.id', '=', 'opd_visits.doctor_id')
+						->select('opd_visits.*', 'patients.name as patient_name', 'patients.guardian_name',
+							'patients.gender', 'patients.age', 'patients.address', 'doctors.name as doctor_name',
+							'doctors.qualification as doctor_qualification', 'doctors.opd_fee')
+						->where('opd_visits.id', $id)->first();
+
+			$header_image = DB::table('cms_settings')->where('name', 'print_header')->first()->content;
+
+			return view('opd_visits.print', compact('header_image', 'opd_visit'));
 		}
 
 

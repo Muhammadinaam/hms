@@ -1199,11 +1199,11 @@ class CBController extends Controller {
 			throw $ex;
 		}
 
-		$this->afterPostAddSave();
+		$this->afterPostAddSave($this->arr[$this->primary_key]);
 		
 	}
 
-	public function afterPostAddSave()
+	public function afterPostAddSave($id)
 	{
 		$this->return_url = ($this->return_url)?$this->return_url:Request::get('return_url');
 

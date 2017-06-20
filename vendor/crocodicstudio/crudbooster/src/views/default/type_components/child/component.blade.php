@@ -11,7 +11,7 @@
 	@if($form['columns'])						
 	<div class="col-sm-12">
 
-	<div id='panel-form-{{$name}}' class="panel panel-danger">
+	<div id='panel-form-{{$name}}' class="panel panel-primary">
 		<div class="panel-heading">
 		  	<i class='fa fa-bars'></i> {{$form['label']}}
 		</div>
@@ -19,7 +19,7 @@
 			
 			<div class='row'>
 				<div class='col-sm-10'>
-					<div class="panel panel-default">
+					<div id="add-data-form-{{$name}}" style="display: none;" class="panel panel-default">
 						<div class="panel-heading"><i class="fa fa-pencil-square-o"></i> Form</div>
 						<div class="panel-body child-form-area">
 							@foreach($form['columns'] as $col)	
@@ -248,7 +248,7 @@
 								    </script>
 
 									@elseif($col['type']=='select')
-									<select id='{{$name_column}}' name='{{$col["name"]}}' class='form-control select2 {{$col['required']?"required":""}}' 										
+									<select style="width: 100%;" id='{{$name_column}}' name='{{$col["name"]}}' class='form-control select2 {{$col['required']?"required":""}}' 										
 										{{($col['readonly']===true)?"readonly":""}} 
 										>
 										<option value=''>{{trans('crudbooster.text_prefix_option')}} {{$col['label']}}</option>
@@ -331,6 +331,28 @@
 									$('#panel-form-{{$name}}').find(".input_date").val('');
 								}
 
+								function showAddDataForm{{$name}}(show)
+								{
+									if(show)
+									{
+										$('#add-data-btn-{{$name}}').hide('fast');
+										$('#add-data-form-{{$name}}').show('fast');
+									}
+									else
+									{
+										$('#add-data-btn-{{$name}}').show('fast');
+										$('#add-data-form-{{$name}}').hide('fast');
+									}
+
+									if(currentRow!=null)
+									{
+										currentRow.removeClass('danger');
+										currentRow = null;
+										$('#btn-add-table-{{$name}}').val('Add');
+
+									}
+								}
+
 								function deleteRow{{$name}}(t) {
 
 									if(confirm("{{trans('crudbooster.delete_title_confirm')}}")) {
@@ -341,10 +363,13 @@
 										}
 									}									
 								}
-								function editRow{{$name}}(t) {									
+								function editRow{{$name}}(t) {		
+
+									showAddDataForm{{$name}}(true);
+
 									var p = $(t).parent().parent(); //parentTR 
 									currentRow = p;
-									p.addClass('warning');
+									p.addClass('danger');
 									$('#btn-add-table-{{$name}}').val('Save changes');
 									@foreach($form['columns'] as $c)
 										@if($c['type']=='select')
@@ -407,9 +432,13 @@
 
 								function addToTable{{$name}}() {
 
+									
+
 									if(validateForm{{$name}}() == false) {
 										return false;
 									}
+
+									showAddDataForm{{$name}}(false);
 
 									var trRow = '<tr>';
 									@foreach($form['columns'] as $c)
@@ -454,23 +483,35 @@
 										currentRow.replaceWith(trRow);
 										currentRow = null;
 									}
-									$('#btn-add-table-{{$name}}').val('Add To Table');
+									$('#btn-add-table-{{$name}}').val('Add');
 									$('#btn-reset-form-{{$name}}').click();									
 								}
 							</script>
 						</div>
 						<div class="panel-footer" align="right">
-							<input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()" value='Reset Form'/>
-							<input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary btn-add-to-table' onclick="addToTable{{$name}}()" value='Add To Table'/>
+							<input type='button' class='btn btn-warning' id="btn-cancel-form-{{$name}}" onclick="showAddDataForm{{$name}}(false)" value='Cancel'/>
+							<!-- <input type='button' class='btn btn-default' id="btn-reset-form-{{$name}}" onclick="resetForm{{$name}}()" value='Reset Form'/> -->
+							<input type='button' id='btn-add-table-{{$name}}' class='btn btn-primary btn-add-to-table' onclick="addToTable{{$name}}()" value='Add'/>
 						</div>
 					</div>
 				</div>
+
+				<div class="col-md-12 text-right">
+					<button id="add-data-btn-{{$name}}" type="button" class="btn btn-success btn-xs"> <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Data</button>
+				</div>
+
+				<script type="text/javascript">
+					$('#add-data-btn-{{$name}}').click(function(){
+						showAddDataForm{{$name}}(true);
+					});
+				</script>
+
 			</div>
 
 			<div class="panel panel-success">
-				<div class="panel-heading">
+				<!-- <div class="panel-heading">
 					<i class='fa fa-table'></i> Table Detail
-				</div>
+				</div> -->
 				<div class="panel-body no-padding table-responsive"  style="max-height: 400px;overflow: auto;">
 					<table id='table-{{$name}}' class='table table-striped table-bordered'>
 					<thead>

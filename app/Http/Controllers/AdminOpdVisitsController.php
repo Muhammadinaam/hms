@@ -30,8 +30,10 @@
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
+			$this->col[] = ["label"=>"ID","name"=>"id"];
 			$this->col[] = ["label"=>"Doctor","name"=>"doctor_id","join"=>"doctors,name"];
 			$this->col[] = ["label"=>"Patient","name"=>"patient_id","join"=>"patients,name"];
+			$this->col[] = ["label"=>"Patient NIC","name"=>"patient_id","join"=>"patients,cnic"];
 			$this->col[] = ["label"=>"Token Number","name"=>"token_number"];
 			$this->col[] = ["label"=>"Date Of Visit","name"=>"date_of_visit"];
 			$this->col[] = ["label"=>"Doctor Fee","name"=>"doctor_fee"];
@@ -39,19 +41,26 @@
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Doctor','name'=>'doctor_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'doctors','datamodal_columns'=>'name,qualification,opd_current_token_number,opd_fee','datamodal_columns_alias'=>'Name,Qualification,Token Number,Fee','datamodal_size'=>'large', 'datamodal_select_to'=>'opd_fee:doctor_fee,opd_current_token_number:token_number'];
-			$this->form[] = ['label'=>'Patient','name'=>'patient_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'patients','datamodal_columns'=>'name,guardian_name,cnic,phone,address','datamodal_columns_alias'=>'Name,Guardian Name,CNIC,Phone,Address','datamodal_size'=>'large'];
+			$this->form[] = ['label'=>'Doctor','name'=>'doctor_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'doctors','datamodal_columns'=>'name,qualification,opd_current_token_number,opd_fee','datamodal_columns_alias'=>'Name,Qualification,Token Number,Fee','datamodal_size'=>'large','datamodal_select_to'=>'opd_fee:doctor_fee,opd_current_token_number:token_number'];
+			$this->form[] = ['label'=>'Patient','name'=>'patient_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'patients','datamodal_columns'=>'name,guardian_name,cnic,phone,address','datamodal_columns_alias'=>'Name,Guardian Name,CNIC,Phone,Address','datamodal_size'=>'large','datamodal_module_path'=>'patients/add'];
 			$this->form[] = ['label'=>'Token Number','name'=>'token_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Doctor Fee','name'=>'doctor_fee','type'=>'number','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true'];
+			$this->form[] = ['label'=>'Bp Up','name'=>'bp_up','type'=>'number','validation'=>'','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Bp Down','name'=>'bp_down','type'=>'number','validation'=>'','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Temperature','name'=>'temperature','type'=>'number','validation'=>'','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Blood Sugar','name'=>'blood_sugar','type'=>'number','validation'=>'','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Weight','name'=>'weight','type'=>'number','validation'=>'','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Pulse','name'=>'pulse_rate','type'=>'number','validation'=>'','width'=>'col-sm-5'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Doctor','name'=>'doctor_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'doctors','datamodal_columns'=>'name,qualification,opd_fee','datamodal_columns_alias'=>'Name,Qualification,Fee','datamodal_size'=>'large'];
-			//$this->form[] = ['label'=>'Patient','name'=>'patient_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'patients','datamodal_columns'=>'name,guardian_name,cnic,phone,address','datamodal_columns_alias'=>'Name,Guardian Name,CNIC,Phone,Address','datamodal_size'=>'large'];
+			//$this->form[] = ['label'=>'Doctor','name'=>'doctor_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'doctors','datamodal_columns'=>'name,qualification,opd_current_token_number,opd_fee','datamodal_columns_alias'=>'Name,Qualification,Token Number,Fee','datamodal_size'=>'large'];
+			//$this->form[] = ['label'=>'Patient','name'=>'patient_id','type'=>'datamodal','validation'=>'required|min:1|max:255','width'=>'col-sm-10','datamodal_table'=>'patients','datamodal_columns'=>'name,guardian_name,cnic,phone,address','datamodal_columns_alias'=>'Name,Guardian Name,CNIC,Phone,Address','datamodal_size'=>'large','datamodal_module_path'=>'patients/add'];
 			//$this->form[] = ['label'=>'Token Number','name'=>'token_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Date Of Visit','name'=>'date_of_visit','type'=>'datetime','validation'=>'required|date_format:Y-m-d H:i:s','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Doctor Fee','name'=>'doctor_fee','type'=>'number','validation'=>'required|min:1|max:255','width'=>'col-sm-10','readonly'=>'true'];
+			//$this->form[] = ['label'=>'Bp Up','name'=>'bp_up','type'=>'number','validation'=>'numeric','width'=>'col-sm-5'];
+			//$this->form[] = ['label'=>'Bp Down','name'=>'bp_down','type'=>'number','validation'=>'nu','width'=>'col-sm-9'];
 			# OLD END FORM
 
 			/* 
@@ -384,7 +393,19 @@
 
 			$header_image = DB::table('cms_settings')->where('name', 'print_header')->first()->content;
 
-			return view('opd_visits.print', compact('header_image', 'opd_visit'));
+			//get print page size
+			$page_size = DB::table('cms_settings')->where('name', 'print_size')->first()->content;
+
+			if($page_size == 'Brief')
+			{
+				$view = 'opd_visits.print_brief';
+			}
+			else if($page_size == 'Detailed')
+			{
+				$view = 'opd_visits.print_detailed';
+			}
+
+			return view($view, compact('header_image', 'opd_visit'));
 		}
 
 

@@ -15,7 +15,7 @@
       <span class="input-group-btn">
         <button class="btn btn-primary" onclick="showModal{{$name}}()" type="button"><i class='fa fa-search'></i> {{trans('crudbooster.datamodal_browse_data')}}</button>
 			<?php if(strlen($form['datamodal_module_path'])>1){ ?>	
-        <a class="btn btn-info"  href="{{CRUDBooster::adminPath()}}/{{$form['datamodal_module_path']}}" target="_blank"><i class='fa fa-edit'></i> {{$form['label']}}</a>
+        <a class="btn btn-info" href="javascript:void(0);"  onclick="window.open('{{CRUDBooster::adminPath()}}/{{$form['datamodal_module_path']}}', '_blank', 'width=800,height=600,menubar=no,toolbar=no')"><i class='fa fa-edit'></i> {{$form['label']}}</a>
 			<?php } ?>
       </span>
     </div><!-- /input-group -->

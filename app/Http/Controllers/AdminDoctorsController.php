@@ -211,7 +211,7 @@
 	        */
 	        $this->load_css = array();
 
-	        $columns[] = ['label'=>'Department','name'=>'department_id','type'=>'datamodal','datamodal_table'=>'departments','datamodal_columns'=>'name,description','datamodal_columns_alias'=>'Name,Description','datamodal_where'=>'','datamodal_size'=>'large'];
+	        $columns[] = ['label'=>'Department','name'=>'department_id','type'=>'datamodal','datamodal_table'=>'departments','datamodal_columns'=>'name,description','datamodal_columns_alias'=>'Name,Description','datamodal_where'=>'','datamodal_size'=>'large','required'=>true];
 	        
 	        $this->form[] = ['label'=>'Departments','name'=>'departments','type'=>'child','columns'=>$columns,'table'=>'department_doctor','foreign_key'=>'doctor_id'];
 

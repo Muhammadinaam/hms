@@ -37,16 +37,18 @@ Route::get('symlink', function(){
 	echo ('Checking public/vendor/crudbooster symlink...<br>');  
 	if(file_exists(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'))) {                      
 	    $vendorpath = public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster');
-	    echo ('Vendor Path: '.$vendorpath);   
+	    echo ('Vendor Path: '.$vendorpath) . '<br>';   
 	    if(realpath($vendorpath) == $vendorpath) {                      
 	        echo ('Removing public/vendor/crudbooster dir, instead of creating a symlink...');                               
 	            rrmdir(public_path('vendor'.DIRECTORY_SEPARATOR.'crudbooster'));
-	            app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
+	            app('files')->link(base_path().'/vendor/crocodicstudio/crudbooster/src/assets', public_path('vendor/crudbooster'));
 	    }            
 	}else{            
 	    echo ('Creating public/vendor/crudbooster symlink...<br>');  
-	    app('files')->link(__DIR__.'/../assets',public_path('vendor/crudbooster'));
+	    app('files')->link(base_path().'/vendor/crocodicstudio/crudbooster/src/assets',public_path('vendor/crudbooster'));
 	}
+
+	echo 'Symlinks generated successfully<br>';
 
 });
 

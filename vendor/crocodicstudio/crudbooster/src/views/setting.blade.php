@@ -106,6 +106,7 @@
                                             case 'upload':
                                             case 'upload_image':
                                                 if($value) {
+                                                  echo "<img style='width:100%;' src='".asset($value)."'>";
                                                   echo "<p><a href='".asset($value)."' target='_blank' title='Download the file of $s->label'><i class='fa fa-download'></i> Download the File  of $s->label</a></p>";
                                                   echo "<input type='hidden' name='$s->name' value='$value'/>";
                                                   echo "<div class='pull-right'><a class='btn btn-danger btn-xs' onclick='if(confirm(\"Are you sure want to delete ?\")) location.href=\"".CRUDBooster::mainpath("delete-file-setting?id=$s->id")."\"' title='Click here to delete'><i class='fa fa-trash'></i></a></div>";

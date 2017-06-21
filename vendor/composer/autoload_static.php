@@ -459,6 +459,8 @@ class ComposerStaticInit8ceab03e36178c0774bb821ea8e1ff9f
         'CreateTableDiagnoses' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_094447_create_table_diagnoses.php',
         'CreateTableDoctors' => __DIR__ . '/../..' . '/database/migrations/2017_06_13_054816_create_table_doctors.php',
         'CreateTableFacilities' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_085520_create_table_facilities.php',
+        'CreateTableOpdVisitDiagnoses' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_153635_create_table_opd_visit_diagnoses.php',
+        'CreateTableOpdVisitFacilities' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_160211_create_table_opd_visit_facilities.php',
         'CreateTableOpdVisitSymptoms' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_095513_create_table_opd_visit_symptoms.php',
         'CreateTableOpdVisits' => __DIR__ . '/../..' . '/database/migrations/2017_06_17_100756_create_table_opd_visits.php',
         'CreateTablePatients' => __DIR__ . '/../..' . '/database/migrations/2017_06_13_090124_create_table_patients.php',

@@ -31,7 +31,7 @@
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
 			$this->col[] = ["label"=>"Name","name"=>"name"];
-			$this->col[] = ["label"=>"Facility Type","name"=>"facility_type","callback_php"=>'$row->facility_type == "1" ? "Product" : "Service"'];
+			$this->col[] = ["label"=>"Facility Type","name"=>"facility_type"];
 			$this->col[] = ["label"=>"Unit","name"=>"unit"];
 			$this->col[] = ["label"=>"Cost","name"=>"cost"];
 			$this->col[] = ["label"=>"Sale Price","name"=>"sale_price"];
@@ -40,7 +40,7 @@
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'Medicines (Tablets, Injections), Surgeries etc'];
-			$this->form[] = ['label'=>'Facility Type','name'=>'facility_type','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-10','dataenum'=>'1|Product;2|Service'];
+			$this->form[] = ['label'=>'Facility Type','name'=>'facility_type','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-10','dataenum'=>'Product;Service'];
 			$this->form[] = ['label'=>'Smallest Unit','name'=>'unit','type'=>'text','width'=>'col-sm-10','placeholder'=>'Tablet'];
 			$this->form[] = ['label'=>'Cost','name'=>'cost','type'=>'number','validation'=>'numeric','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Sale Price','name'=>'sale_price','type'=>'number','validation'=>'numeric','width'=>'col-sm-10'];
@@ -219,19 +219,25 @@
 	        "
 		        $(document).ready(function(){
 		        	
+		        	enableDisableCostAndUnit();
 		        	$('#facility_type').change(function(){
-		        		if( $('#facility_type').val() == 2 )
-		        		{
-		        			$('#cost, #unit').val('');
-		        			$('#cost, #unit').attr('disabled', true);
-		        		}
-		        		else
-		        		{
-		        			$('#cost, #unit').attr('disabled', false);
-		        		}
+		        		enableDisableCostAndUnit();
 		        	});
 
 		        });
+
+		        function enableDisableCostAndUnit()
+		        {
+		        	if( $('#facility_type').val() == 'Service' )
+	        		{
+	        			$('#cost, #unit').val('');
+	        			$('#cost, #unit').attr('disabled', true);
+	        		}
+	        		else
+	        		{
+	        			$('#cost, #unit').attr('disabled', false);
+	        		}
+		        }
 	        ";
 	        
 	        

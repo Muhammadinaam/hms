@@ -77,6 +77,8 @@ return array(
     'CreateTableDiagnoses' => $baseDir . '/database/migrations/2017_06_21_094447_create_table_diagnoses.php',
     'CreateTableDoctors' => $baseDir . '/database/migrations/2017_06_13_054816_create_table_doctors.php',
     'CreateTableFacilities' => $baseDir . '/database/migrations/2017_06_21_085520_create_table_facilities.php',
+    'CreateTableOpdVisitDiagnoses' => $baseDir . '/database/migrations/2017_06_21_153635_create_table_opd_visit_diagnoses.php',
+    'CreateTableOpdVisitFacilities' => $baseDir . '/database/migrations/2017_06_21_160211_create_table_opd_visit_facilities.php',
     'CreateTableOpdVisitSymptoms' => $baseDir . '/database/migrations/2017_06_21_095513_create_table_opd_visit_symptoms.php',
     'CreateTableOpdVisits' => $baseDir . '/database/migrations/2017_06_17_100756_create_table_opd_visits.php',
     'CreateTablePatients' => $baseDir . '/database/migrations/2017_06_13_090124_create_table_patients.php',

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableFacilities extends Migration
+class CreateTableOpdVisitDiagnoses extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,13 @@ class CreateTableFacilities extends Migration
      */
     public function up()
     {
-        Schema::create('facilities', function (Blueprint $table) {
-            
+        Schema::create('opd_visit_diagnoses', function (Blueprint $table) {
             $table->engine = 'InnoDB';
 
-            $table->increments('id');
+            $table->bigIncrements('id');
 
-            $table->string('name');
-            $table->string('facility_type');
-            $table->string('unit')->nullable();
-            $table->decimal('cost')->nullable();
-            $table->decimal('sale_price')->nullable();
+            $table->unsignedBigInteger('opd_visit_id');
+            $table->integer('diagnosis_id');
             
             $table->timestamps();
         });
@@ -36,6 +32,6 @@ class CreateTableFacilities extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('facilities');
+        Schema::dropIfExists('opd_visit_diagnoses');
     }
 }

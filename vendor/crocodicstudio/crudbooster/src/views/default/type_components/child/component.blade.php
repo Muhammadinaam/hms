@@ -34,7 +34,7 @@
 									@if($col['type']=='text')
 									<!-- previous code -->
 									<!--<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='$col[max]'":"" }} name='{{$col["name"]}}' class='form-control  -->
-									<input id='{{$name_column}}' type='text' {{ ($col['max'])?"maxlength='$col[max]'":"" }} class='form-control {{$col['required']?"required":""}}' 										
+									<input id='{{$name_column}}' type='text' placeholder="{{isset($col['placeholder'])?$col['placeholder']:''}}" {{ ($col['max'])?"maxlength='$col[max]'":"" }} class='form-control {{$col['required']?"required":""}}' 										
 										{{($col['readonly']===true)?"readonly":""}} 
 										/>
 									@elseif($col['type']=='radio')
@@ -67,7 +67,7 @@
 									  <input type="hidden" class="input-id">
 								      <input type="text" class="form-control input-label {{$col['required']?"required":""}}" readonly>
 								      <span class="input-group-btn">
-								        <button class="btn btn-primary" onclick="showModal{{$name_column}}()" type="button"><i class='fa fa-search'></i> Browse Data</button>
+								        <button class="btn btn-primary" onclick="showModal{{$name_column}}()" type="button"><i class='fa fa-search'></i></button>
 								      </span>
 								    </div><!-- /input-group -->
 

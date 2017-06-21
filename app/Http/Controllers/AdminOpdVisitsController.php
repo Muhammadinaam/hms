@@ -246,17 +246,70 @@
 			{
 				$this->form[] = ['type'=>'html','html'=>'<div id="show_in_edit_only" class="row">'];
 
-				$this->form[] = ['type'=>'html','html'=>'<br><div class="col-md-12">'];
+				$this->form[] = ['type'=>'html','html'=>'<div class="col-md-12">'];
 				$this->form[] = ['type'=>'html','html'=>'<fieldset>'];
 				$this->form[] = ['type'=>'html','html'=>'<legend>Symptoms, Diagnoses & Medicines</legend>'];
 
-				$this->form[] = ['label'=>'Symptoms','name'=>'symptom_id', 'relationship_table' => 'opd_visit_symptoms','type'=>'select2','datatable'=>'symptoms,name','datatable_ajax'=>true];
+
+				$this->form[] = ['type'=>'html','html'=>'<div class="col-md-6">'];
+				$this->form[] = ['type'=>'html','html'=>'<fieldset>'];
+				$this->form[] = ['type'=>'html','html'=>'<legend>Symptoms</legend>'];
+				$this->form[] = ['label'=>'Symptoms','name'=>'symptom_id', 'relationship_table' => 'opd_visit_symptoms','type'=>'select2','datatable'=>'symptoms,name','datatable_ajax'=>false];
+
+				$this->form[] = ['label'=>'New Symptoms','name'=>'new_symptoms','type'=>'text','placeholder'=>'Headache,Vomitting'];
+				$this->form[] = ['type'=>'html','html'=>'</fieldset>'];
+				$this->form[] = ['type'=>'html','html'=>'</div>'];
+
+
+
+				$this->form[] = ['type'=>'html','html'=>'<div class="col-md-6">'];
+				$this->form[] = ['type'=>'html','html'=>'<fieldset>'];
+				$this->form[] = ['type'=>'html','html'=>'<legend>Diagnoses</legend>'];
+				$this->form[] = ['label'=>'Diagnoses','name'=>'diagnosis_id', 'relationship_table' => 'opd_visit_diagnoses','type'=>'select2','datatable'=>'diagnoses,name','datatable_ajax'=>false];
+
+				$this->form[] = ['label'=>'New Diagnoses','name'=>'new_diagnoses','type'=>'text','placeholder'=>'Acne,Asthama'];
+				$this->form[] = ['type'=>'html','html'=>'</fieldset>'];
+				$this->form[] = ['type'=>'html','html'=>'</div>'];
+
+
+
+				$facilities_columns[] = ['label'=>'Facility','name'=>'facility_id','type'=>'datamodal','datamodal_table'=>'facilities','datamodal_columns'=>'name,unit,cost,sale_price','datamodal_columns_alias'=>'Name,Unit,Cost,Sale Price','datamodal_select_to'=>'sale_price:sale_price','datamodal_where'=>'','datamodal_size'=>'large','required'=>true];
+
+				$facilities_columns[] = ['label'=>'Days','name'=>'days','type'=>'number'];
+				$facilities_columns[] = ['label'=>'Direction','name'=>'direction','type'=>'text','placeholder'=>'1+1+1 or 1 tablet daily three times'];
+				$facilities_columns[] = ['label'=>'Qty','name'=>'qty','type'=>'number','required'=>true];
+				
+				$facilities_columns[] = ['label'=>'Price','name'=>'sale_price','type'=>'number','readonly'=>true,'required'=>true];
+
+				$facilities_columns[] = ['label'=>'Sub Total','name'=>'sub_total','type'=>'number','formula'=>"[qty] * [sale_price]","readonly"=>true,'required'=>true];
+
+				$this->form[] = ['label'=>'Facilities','name'=>'facilities','type'=>'child','columns'=>$facilities_columns,'table'=>'opd_visit_facilities','foreign_key'=>'opd_visit_id'];
+
+
+				$this->form[] = ['label'=>'Total Charges','name'=>'total_charges','type'=>'number',"readonly"=>true];
 
 				$this->form[] = ['type'=>'html','html'=>'</fieldset>'];
 				$this->form[] = ['type'=>'html','html'=>'</div>'];
 
 				$this->form[] = ['type'=>'html','html'=>'</div>'];
 			}
+
+			$this->script_js = "
+
+				$(document).ready(function(){
+					var doctor_fee = +$('#doctor_fee').val();
+
+					setInterval(function(){
+						var total = 0;
+						$('table#table-facilities .sub_total').each(function(){
+							var amount = +$(this).text();
+							total += amount;
+						});
+						$('#total_charges').val(total + doctor_fee);
+					}, 500);
+				});
+
+			";
 	        
 	    }
 
@@ -311,6 +364,9 @@
 	    	// increase token number of doctor
 	    	DB::table('doctors')->where('id', $postdata['doctor_id'])
 	    				->update(['opd_current_token_number' => $postdata['token_number'] + 1]);
+
+
+			$this->before_add_or_edit($postdata);
 	    }
 
 	    /* 
@@ -322,7 +378,7 @@
 	    */
 	    public function hook_after_add($id) {        
 	        //Your code here
-
+			$this->after_add_or_edit($id);
 	    }
 
 	    /* 
@@ -336,6 +392,7 @@
 	    public function hook_before_edit(&$postdata,$id) {        
 	        //Your code here
 
+			$this->before_add_or_edit($postdata);
 	    }
 
 	    /* 
@@ -347,7 +404,7 @@
 	    */
 	    public function hook_after_edit($id) {
 	        //Your code here 
-
+	    	$this->after_add_or_edit($id);
 	    }
 
 	    /* 
@@ -377,6 +434,73 @@
 
 
 	    //By the way, you can still create your own method in here... :) 
+
+	    public function before_add_or_edit(&$postdata)
+	    {
+	    	unset($postdata['new_symptoms']);
+			unset($postdata['new_diagnoses']);
+			unset($postdata['total_charges']);
+	    }
+
+	    public function after_add_or_edit($id)
+	    {
+	    	// update cost and subtotal
+	    	$opd_facilities = DB::table('opd_visit_facilities')->where('opd_visit_id', $id)->get();
+
+	    	foreach ($opd_facilities as $key => $opd_facility) {
+	    		$cost = DB::table('facilities')->where('id', $opd_facility->facility_id)->first()->cost;
+
+	    		DB::table('opd_visit_facilities')
+	    			->where('id', $opd_facility->id)
+	    			->update([
+	    				'cost' => $cost,
+	    			]);
+	    	}
+
+	    	//new symptoms
+	    	if(request()->new_symptoms != '')
+	    	{
+	    		$new_symptoms = explode(',', request()->new_symptoms);
+
+	    		foreach ($new_symptoms as $key => $value) {
+	    			$value = trim($value);
+	    			$item = DB::table('symptoms')->where('name', $value)->first();
+
+	    			$item_id = 0;
+
+	    			if( $item == null )
+	    			{
+	    				$item_id = DB::table('symptoms')->insertGetId(['name'=>$value]);
+	    			}	
+	    			else
+	    				$item_id = $item->id;
+
+	    			DB::table('opd_visit_symptoms')->insert(['opd_visit_id'=>$id, 'symptom_id'=>$item_id]);
+	    		}	    		
+	    	}
+
+	    	//new diagnoses
+	    	if(request()->new_diagnoses != '')
+	    	{
+	    		$new_diagnoses = explode(',', request()->new_diagnoses);
+
+	    		foreach ($new_diagnoses as $key => $value) {
+	    			$value = trim($value);
+	    			$item = DB::table('diagnoses')->where('name', $value)->first();
+
+	    			$item_id = 0;
+
+	    			if( $item == null )
+	    			{
+	    				$item_id = DB::table('diagnoses')->insertGetId(['name'=>$value]);
+	    			}	
+	    			else
+	    				$item_id = $item->id;
+
+	    			DB::table('opd_visit_diagnoses')->insert(['opd_visit_id'=>$id, 'diagnosis_id'=>$item_id]);
+	    		}	    		
+	    	}
+	    }
 
 	    public function getAdd(){
 			$this->cbLoader();
@@ -425,10 +549,16 @@
 							'doctors.qualification as doctor_qualification', 'doctors.opd_fee')
 						->where('opd_visits.id', $id)->first();
 
-			$header_image = DB::table('cms_settings')->where('name', 'print_header')->first()->content;
+			$header_image = DB::table('cms_settings')
+			->where('name', 'header_image')
+			->where('group_setting', 'OPD Visit Settings')
+			->first()->content;
 
 			//get print page size
-			$page_size = DB::table('cms_settings')->where('name', 'print_size')->first()->content;
+			$page_size = DB::table('cms_settings')
+			->where('name', 'print_size')
+			->where('group_setting', 'OPD Visit Settings')
+			->first()->content;
 
 			if($page_size == 'Brief')
 			{

@@ -742,7 +742,7 @@ class CRUDBooster  {
 			if(self::isColumnExists($child_table,'id_'.$parent_table)) {				
 				return 'id_'.$parent_table;
 			}else{				
-				return $parent_table.'_id';
+				return str_singular($parent_table).'_id';
 			}
 		}
 	

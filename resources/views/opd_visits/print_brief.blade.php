@@ -18,6 +18,10 @@
 			margin-bottom: 10px;
 		}
 
+		.hospital_info_table td, .patient_info_table td {
+			border-bottom: 1px solid lightgray;
+		}
+
 		.vital_signs_table {
 			width: 100%;
 			float: left;
@@ -36,9 +40,9 @@
 			text-align: center;
 		}
 
-		.info {
+		.label {
+			
 			font-weight: bold;
-			text-align: center;
 		}
 
 		.clear-both {
@@ -60,6 +64,7 @@
 		.vital_signs_table .info {
 			width: 50%;
 			text-align: center;
+			font-weight: bold;
 		}
 
 		.symptoms_diagnosis_medicines_table td, .vital_signs_table td {
@@ -81,6 +86,13 @@
 
 	<br>
 
+	<table style="width: 100%">
+		<tr>
+			<td>Visit No: <b>{{$opd_visit->id}}</b></td>
+			<td style="text-align: right;">Token No: <b>{{$opd_visit->token_number}}</b></td>
+		</tr>
+	</table>
+
 	<table class="patient_info_table">
 			<tr>
 				<td class="table_heading" colspan="2">
@@ -89,19 +101,15 @@
 			</tr>
 
 			<tr>
-				<td>Name</td> <td class="info">{{$opd_visit->patient_name}}</td>
+				<td class="label">Name</td> <td class="info">{{$opd_visit->patient_name}}</td>
 			</tr>
 
 			<tr>
-				<td>Father / Guardian Name</td> <td class="info">{{$opd_visit->guardian_name}}</td>
+				<td class="label">Gender</td> <td class="info">{{$opd_visit->gender}}</td>
 			</tr>
 
 			<tr>
-				<td>Gender</td> <td class="info">{{$opd_visit->gender}}</td>
-			</tr>
-
-			<tr>
-				<td>Age</td> <td class="info">{{ \Carbon\Carbon::now()->diffInYears(\Carbon\Carbon::parse($opd_visit->created_at)) + $opd_visit->age}}</td>
+				<td class="label">Age</td> <td class="info">{{ \Carbon\Carbon::now()->diffInYears(\Carbon\Carbon::parse($opd_visit->created_at)) + $opd_visit->age}}</td>
 			</tr>
 		</table>
 
@@ -113,19 +121,13 @@
 			</tr>
 
 			<tr>
-				<td>Visit Date</td> <td class="info">{{\Carbon\Carbon::parse($opd_visit->created_at)->format('d-M-Y')}}</td>
+				<td class="label">Visit Date</td> <td class="info">{{\Carbon\Carbon::parse($opd_visit->created_at)->format('d-M-Y')}}</td>
 			</tr>
 			<tr>
-				<td>Visit No.</td> <td class="info">{{$opd_visit->id}}</td>
+				<td class="label">Doctor</td> <td class="info">{{$opd_visit->doctor_name}}</td>
 			</tr>
 			<tr>
-				<td>Token No.</td> <td class="info">{{$opd_visit->token_number}}</td>
-			</tr>
-			<tr>
-				<td>Doctor</td> <td class="info">{{$opd_visit->doctor_name}}<br>{{$opd_visit->doctor_qualification}}</td>
-			</tr>
-			<tr>
-				<td>Fee Received</td> <td class="info">{{$opd_visit->opd_fee}}</td>
+				<td class="label">Fee Received</td> <td class="info">{{$opd_visit->opd_fee}}</td>
 			</tr>
 		</table>
 

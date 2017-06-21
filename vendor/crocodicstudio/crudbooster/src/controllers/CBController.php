@@ -1310,10 +1310,9 @@ class CBController extends Controller {
 					}
 				}
 
-
 				if($ro['type'] == 'select2') {
 					if($ro['relationship_table']) {
-						$datatable = explode(",",$ro['datatable'])[0];					
+						$datatable = explode(",",$ro['datatable'])[0];	
 						
 						$foreignKey2 = CRUDBooster::getForeignKey($datatable,$ro['relationship_table']);
 						$foreignKey = CRUDBooster::getForeignKey($this->table,$ro['relationship_table']);

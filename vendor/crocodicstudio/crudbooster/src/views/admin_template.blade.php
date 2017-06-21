@@ -26,6 +26,18 @@
         @if($style_css)
             {!! $style_css !!}
         @endif
+
+        fieldset {
+          border: 1px solid #ccc;
+          padding: 10px;
+        }
+
+        legend {
+          border: 1px solid #ccc;
+          padding: 5px;
+          background-color: lightgray;
+        }
+
     </style>
     @if($load_css)
         @foreach($load_css as $css)

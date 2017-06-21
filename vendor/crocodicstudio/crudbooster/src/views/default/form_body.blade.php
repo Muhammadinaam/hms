@@ -69,7 +69,7 @@ foreach($forms as $form) {
 		$placeholder  = (@$form['placeholder'])?"placeholder='".$form['placeholder']."'":"";   
 		$col_width    = @$form['width']?:"col-sm-9";		
 
-		if($parent_field == $name) {
+		if($parent_field == $name && $name != '') {
 			$type = 'hidden';
 			$value = $parent_id;
 		}	
@@ -80,9 +80,12 @@ foreach($forms as $form) {
 			$header_group_class = ($header_group_class)?:"header-group-$index";	
 		}      
 
+
 		?>
+
 		@if(file_exists(base_path('/vendor/crocodicstudio/crudbooster/src/views/default/type_components/'.$type.'/component.blade.php')))
 			@include('crudbooster::default.type_components.'.$type.'.component')
+
 		@elseif(file_exists(resource_path('views/vendor/crudbooster/type_components/'.$type.'/component.blade.php')))
 			@include('vendor.crudbooster.type_components.'.$type.'.component')
 		@else

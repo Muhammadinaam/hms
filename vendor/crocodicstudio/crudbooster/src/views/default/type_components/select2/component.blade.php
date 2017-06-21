@@ -11,6 +11,7 @@
 				@if($form['datatable_ajax'] == true)
 
 				<?php 							
+					
 					$datatable = @$form['datatable'];
 					$where     = @$form['datatable_where'];
 					$format    = @$form['datatable_format'];													

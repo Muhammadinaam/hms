@@ -61,7 +61,7 @@ class PrivilegesController extends CBController {
 			DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls    = cms_moduls.id and id_cms_privileges = '$id') as is_edit"),
 			DB::raw("(select is_delete from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_delete")
 			)
-		->orderby("name","asc")->get();		
+		->orderby("name","asc")->orderby("module_group","asc")->get();		
 		$data['page_menu'] = Route::getCurrentRoute()->getActionName();
 		return view('crudbooster::privileges',$data);
 	}
@@ -76,12 +76,16 @@ class PrivilegesController extends CBController {
 		}
 
 		$this->validation($request);				
-		$this->input_assignment($request);		
+		$this->input_assignment($request);	
+
+
 
 		$this->arr[$this->primary_key] = DB::table($this->table)->max($this->primary_key) + 1;	
 
 		DB::table($this->table)->insert($this->arr);
 		$id = $this->arr[$this->primary_key];
+
+		$this->saveOtherPermissions($id);
 
 		//set theme 
 		Session::put('theme_color',$this->arr['theme_color']);
@@ -149,7 +153,7 @@ class PrivilegesController extends CBController {
 		$moduls = DB::table("cms_moduls")
 		->where('is_protected',0)
 		->select("cms_moduls.*")
-		->orderby("name","asc")->get();
+		->orderby("name","asc")->orderby("module_group","asc")->get();
 		$page_menu = Route::getCurrentRoute()->getActionName();
 		return view('crudbooster::privileges',compact('row','page_title','moduls','page_menu'));
 	}
@@ -165,7 +169,9 @@ class PrivilegesController extends CBController {
 		}
 
 		$this->validation($id);
-		$this->input_assignment($id);		
+		$this->input_assignment($id);
+
+		$this->saveOtherPermissions($id);		
 
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 										
@@ -248,11 +254,29 @@ class PrivilegesController extends CBController {
 
 		CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_update_data_success",['module'=>"Privilege",'title'=>$row->name]),'success');
 	}
+
+	public function saveOtherPermissions($current_privilege_id)
+	{
+		// delete old
+		DB::table('cms_privileges_other_permissions')->where('cms_privilege_id', $current_privilege_id)->delete();
+
+		// add new
+		$insert_array = array();
+		foreach (request()->other_permissions as $key => $value) {
+			$insert_array[] = [
+				'cms_privilege_id' => $current_privilege_id,
+				'cms_other_permission_id' => $key,
+			];
+		}
+
+		DB::table('cms_privileges_other_permissions')->insert($insert_array);
+	}
 	
 	public function getDelete($id) {
 		$this->cbLoader();
 		
 		$row = DB::table($this->table)->where($this->primary_key,$id)->first();
+		DB::table('cms_privileges_other_permissions')->where('cms_privilege_id', $id)->delete();
 
 		if(!CRUDBooster::isDelete() && $this->global_privilege==FALSE) {			
 			CRUDBooster::insertLog(trans("crudbooster.log_try_delete",['name'=>$row->{$this->title_field},'module'=>CRUDBooster::getCurrentModule()->name]));			

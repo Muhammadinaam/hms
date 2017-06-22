@@ -248,29 +248,34 @@
 
 				$this->form[] = ['type'=>'html','html'=>'<div class="col-md-12">'];
 				$this->form[] = ['type'=>'html','html'=>'<fieldset>'];
-				$this->form[] = ['type'=>'html','html'=>'<legend>Symptoms, Diagnoses & Medicines</legend>'];
+				$this->form[] = ['type'=>'html','html'=>'<legend>Detail</legend>'];
+
+				$show_symptoms = DB::table('cms_settings')->where('name','show_symptoms_in_opd_visit')->where('group_setting','OPD Visit Settings')->first()->content;
+				if($show_symptoms == 'Yes')
+				{
+					$this->form[] = ['type'=>'html','html'=>'<div class="col-md-6">'];
+					$this->form[] = ['type'=>'html','html'=>'<fieldset>'];
+					$this->form[] = ['type'=>'html','html'=>'<legend>Symptoms</legend>'];
+					$this->form[] = ['label'=>'Symptoms','name'=>'symptom_id', 'relationship_table' => 'opd_visit_symptoms','type'=>'select2','datatable'=>'symptoms,name','datatable_ajax'=>false];
+
+					$this->form[] = ['label'=>'New Symptoms','name'=>'new_symptoms','type'=>'text','placeholder'=>'Headache,Vomitting'];
+					$this->form[] = ['type'=>'html','html'=>'</fieldset>'];
+					$this->form[] = ['type'=>'html','html'=>'</div>'];
+				}
 
 
-				$this->form[] = ['type'=>'html','html'=>'<div class="col-md-6">'];
-				$this->form[] = ['type'=>'html','html'=>'<fieldset>'];
-				$this->form[] = ['type'=>'html','html'=>'<legend>Symptoms</legend>'];
-				$this->form[] = ['label'=>'Symptoms','name'=>'symptom_id', 'relationship_table' => 'opd_visit_symptoms','type'=>'select2','datatable'=>'symptoms,name','datatable_ajax'=>false];
+				$show_diagnoses = DB::table('cms_settings')->where('name','show_diagnoses_in_opd_visit')->where('group_setting','OPD Visit Settings')->first()->content;
+				if($show_diagnoses == 'Yes')
+				{
+					$this->form[] = ['type'=>'html','html'=>'<div class="col-md-6">'];
+					$this->form[] = ['type'=>'html','html'=>'<fieldset>'];
+					$this->form[] = ['type'=>'html','html'=>'<legend>Diagnoses</legend>'];
+					$this->form[] = ['label'=>'Diagnoses','name'=>'diagnosis_id', 'relationship_table' => 'opd_visit_diagnoses','type'=>'select2','datatable'=>'diagnoses,name','datatable_ajax'=>false];
 
-				$this->form[] = ['label'=>'New Symptoms','name'=>'new_symptoms','type'=>'text','placeholder'=>'Headache,Vomitting'];
-				$this->form[] = ['type'=>'html','html'=>'</fieldset>'];
-				$this->form[] = ['type'=>'html','html'=>'</div>'];
-
-
-
-				$this->form[] = ['type'=>'html','html'=>'<div class="col-md-6">'];
-				$this->form[] = ['type'=>'html','html'=>'<fieldset>'];
-				$this->form[] = ['type'=>'html','html'=>'<legend>Diagnoses</legend>'];
-				$this->form[] = ['label'=>'Diagnoses','name'=>'diagnosis_id', 'relationship_table' => 'opd_visit_diagnoses','type'=>'select2','datatable'=>'diagnoses,name','datatable_ajax'=>false];
-
-				$this->form[] = ['label'=>'New Diagnoses','name'=>'new_diagnoses','type'=>'text','placeholder'=>'Acne,Asthama'];
-				$this->form[] = ['type'=>'html','html'=>'</fieldset>'];
-				$this->form[] = ['type'=>'html','html'=>'</div>'];
-
+					$this->form[] = ['label'=>'New Diagnoses','name'=>'new_diagnoses','type'=>'text','placeholder'=>'Acne,Asthama'];
+					$this->form[] = ['type'=>'html','html'=>'</fieldset>'];
+					$this->form[] = ['type'=>'html','html'=>'</div>'];
+				}
 
 
 				$facilities_columns[] = ['label'=>'Facility','name'=>'facility_id','type'=>'datamodal','datamodal_table'=>'facilities','datamodal_columns'=>'name,unit,cost,sale_price','datamodal_columns_alias'=>'Name,Unit,Cost,Sale Price','datamodal_select_to'=>'sale_price:sale_price','datamodal_where'=>'','datamodal_size'=>'large','required'=>true];

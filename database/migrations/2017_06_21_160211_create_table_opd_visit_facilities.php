@@ -21,8 +21,8 @@ class CreateTableOpdVisitFacilities extends Migration
 
             $table->unsignedBigInteger('opd_visit_id');
             $table->integer('facility_id');
-            $table->integer('days');
-            $table->string('direction');
+            $table->integer('days')->nullable();
+            $table->string('direction')->nullable();
             $table->decimal('qty');
             $table->decimal('cost')->nullable();
             $table->decimal('sale_price');

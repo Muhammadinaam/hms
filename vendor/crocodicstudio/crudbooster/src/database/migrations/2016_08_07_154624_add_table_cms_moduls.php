@@ -16,6 +16,7 @@ class AddTableCmsModuls extends Migration {
 		{
 			$table->increments('id');
 
+			$table->string('module_group')->nullable();
 			$table->string('name')->nullable();
 			$table->string('icon')->nullable();
 			$table->string('path')->nullable();

@@ -64,6 +64,10 @@
             </div>
         </div>
         <div class="form-group">
+            <label for="">Module Group</label>
+            <input type="text" class="form-control" required name="name" value="{{$row->module_group}}" >
+        </div>
+        <div class="form-group">
             <label for="">Module Name</label>
             <input type="text" class="form-control" required name="name" value="{{$row->name}}" >
         </div>

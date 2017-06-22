@@ -33,6 +33,7 @@ class ModulsController extends CBController {
 
 		
 		$this->col   = array();		
+		$this->col[] = array("label"=>"Module Group","name"=>"module_group");
 		$this->col[] = array("label"=>"Name","name"=>"name");
 		$this->col[] = array("label"=>"Table","name"=>"table_name");		
 		$this->col[] = array("label"=>"Path","name"=>"path"); 		
@@ -40,6 +41,7 @@ class ModulsController extends CBController {
 		$this->col[] = array("label"=>"Protected","name"=>"is_protected","visible"=>false);
 
 		$this->form   = array();	
+		$this->form[] = array("label"=>"Module Group","name"=>"module_group","placeholder"=>"",'required'=>true);
 		$this->form[] = array("label"=>"Name","name"=>"name","placeholder"=>"Module name here",'required'=>true);
 
 		$tables = CRUDBooster::listTables();

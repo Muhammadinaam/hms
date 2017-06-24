@@ -62,7 +62,7 @@
                           <input type="hidden" name="_token" value="{{ csrf_token() }}">
                           <div class="box-body">
                                   <?php 
-                                    $set = DB::table('cms_settings')->where('group_setting',$page_title)->get();
+                                    $set = DB::table('cms_settings')->where('group_setting',$page_title)->orderBy('id')->get();
                                     foreach($set as $s):
 
                                       $value = $s->content;

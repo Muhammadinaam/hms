@@ -233,15 +233,19 @@
 	<script type="text/javascript" src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 
 	<script type="text/javascript">
-		function print_page()
-		{
-			window.print();
-			window.location = "{{url('admin/opd_visits')}}";
-		}
+		
 
 		$(document).ready(function(){
-			print_page();
+			window.print();
+			setTimeout("closePrintView()", 3000);
+			
+
 		});
+
+		function closePrintView() {
+	        //window.location = "{{url('admin/opd_visits')}}";
+	        document.location.href = "{{url('admin/opd_visits')}}";
+	    }
 
 	</script>
 

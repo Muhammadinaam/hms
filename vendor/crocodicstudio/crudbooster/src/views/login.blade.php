@@ -31,7 +31,15 @@
     <link rel='stylesheet' href='{{asset("vendor/crudbooster/assets/css/main.css")}}'/>
     <style type="text/css">
       .login-page, .register-page {
-          background: {{ CRUDBooster::getSetting("login_background_color")?:'#dddddd'}} url('{{ CRUDBooster::getSetting("login_background_image")?asset(CRUDBooster::getSetting("login_background_image")):asset('vendor/crudbooster/assets/bg_blur3.jpg') }}');
+
+          
+
+          @if( CRUDBooster::getSetting("login_screen_background_image") != '' )
+          background: url('{{asset(CRUDBooster::getSetting("login_screen_background_image"))}}');
+          @else
+          background-color: {{ CRUDBooster::getSetting("login_screen_background_colour")?:'#dddddd'}};
+          @endif
+
           color: {{ CRUDBooster::getSetting("login_font_color")?:'#ffffff' }} !important;
           background-repeat: no-repeat;
           background-position: center;
@@ -41,63 +49,88 @@
         margin: 2% auto;
       }
       .login-box-body {
-        box-shadow: 0px 0px 50px rgba(0,0,0,0.8);              
-        background: rgba(255,255,255,0.9);
+        box-shadow: 0px 0px 20px rgba(0,0,0,0.8);              
+        background: rgba(255,255,255,0.6);
         color: {{ CRUDBooster::getSetting("login_font_color")?:'#666666' }} !important;
       }
       html,body {
         overflow: hidden;
       }
+
+      .outer {
+          display: table;
+          position: absolute;
+          height: 80%;
+          width: 100%;
+      }
+
+      .middle {
+          display: table-cell;
+          vertical-align: middle;
+      }
+
+      .inner {
+          margin-left: auto;
+          margin-right: auto; 
+          width: /*whatever width you want*/;
+      }
+
     </style>
   </head>
 
   <body class="login-page">
 
-    <div class="login-box">
-      <div class="login-logo">
-        <a href="{{url('/')}}">
-            <img title='{!!(CRUDBooster::getSetting('appname') == 'CRUDBooster')?"<b>CRUD</b>Booster":CRUDBooster::getSetting('appname')!!}' src='{{ CRUDBooster::getSetting("logo")?asset(CRUDBooster::getSetting('logo')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}' style='max-width: 100%;max-height:170px'/>
-        </a>
-      </div><!-- /.login-logo -->      
-      <div class="login-box-body">
-	  
-    		@if ( Session::get('message') != '' )
-        		<div class='alert alert-warning'>
-        			{{ Session::get('message') }}
-        		</div>	
-    		@endif 
-		
-        <p class='login-box-msg'>{{trans("crudbooster.login_message")}}</p>
-        <form autocomplete='off' action="{{ route('postLogin') }}" method="post">
-		  <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-          <div class="form-group has-feedback">
-            <input autocomplete='off'  type="text" class="form-control" name='email' required placeholder="Email"/>
-            <span class="glyphicon glyphicon-user form-control-feedback"></span>
-          </div>
-          <div class="form-group has-feedback">
-            <input autocomplete='off'  type="password" class="form-control" name='password' required placeholder="Password"/>
-            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-          </div>
-          <div style="margin-bottom:10px" class='row'>
-            <div class='col-xs-12'>
-                <button type="submit" class="btn btn-primary btn-block btn-flat"><i class='fa fa-lock'></i> {{trans("crudbooster.button_sign_in")}}</button>                
-            </div>
-          </div>       
-          
-          <div class='row'>
-            <div class='col-xs-12' align="center"><p style="padding:10px 0px 10px 0px">{{trans("crudbooster.text_forgot_password")}} <a href='{{route("getForgot")}}'>{{trans("crudbooster.click_here")}}</a>   </p></div>
-          </div>
-        </form>
-        
+    <div class="outer">
+      <div class="middle">
+        <div class="inner">  
 
-		<br/>
-        <!--a href="#">I forgot my password</a-->
+          <div class="login-box">
+            <div class="login-logo">
+              <a href="{{url('/')}}">
+                  <img title='{!!(CRUDBooster::getSetting('appname') == 'CRUDBooster')?"<b>CRUD</b>Booster":CRUDBooster::getSetting('appname')!!}' src='{{ CRUDBooster::getSetting("logo")?asset(CRUDBooster::getSetting('logo')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}' style='max-width: 100%;max-height:170px'/>
+              </a>
+            </div><!-- /.login-logo -->      
+            <div class="login-box-body">
+      	  
+          		@if ( Session::get('message') != '' )
+              		<div class='alert alert-warning'>
+              			{{ Session::get('message') }}
+              		</div>	
+          		@endif 
+      		
+              <p class='login-box-msg'>{{trans("crudbooster.login_message")}}</p>
+              <form autocomplete='off' action="{{ route('postLogin') }}" method="post">
+      		  <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                <div class="form-group has-feedback">
+                  <input autocomplete='off'  type="text" class="form-control" name='email' required placeholder="Email"/>
+                  <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input autocomplete='off'  type="password" class="form-control" name='password' required placeholder="Password"/>
+                  <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div style="margin-bottom:10px" class='row'>
+                  <div class='col-xs-12'>
+                      <button type="submit" class="btn btn-primary btn-block btn-flat"><i class='fa fa-lock'></i> {{trans("crudbooster.button_sign_in")}}</button>                
+                  </div>
+                </div>       
+                
+                <div class='row'>
+                  <div class='col-xs-12' align="center"><p style="padding:10px 0px 10px 0px">{{trans("crudbooster.text_forgot_password")}} <a href='{{route("getForgot")}}'>{{trans("crudbooster.click_here")}}</a>   </p></div>
+                </div>
+              </form>
+              
 
-      </div><!-- /.login-box-body -->
+      		<br/>
+              <!--a href="#">I forgot my password</a-->
 
-    </div><!-- /.login-box -->
+            </div><!-- /.login-box-body -->
 
+          </div><!-- /.login-box -->
 
+        </div> <!-- <div class="inner"> -->
+      </div> <!-- <div class="middle"> -->
+    </div> <!-- <div class="outer"> -->
 
     <!-- jQuery 2.1.3 -->
     <script src="{{asset('vendor/crudbooster/assets/adminlte/plugins/jQuery/jQuery-2.1.4.min.js')}}"></script>

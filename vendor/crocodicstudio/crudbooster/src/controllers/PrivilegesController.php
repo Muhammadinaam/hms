@@ -86,6 +86,7 @@ class PrivilegesController extends CBController {
 		$id = $this->arr[$this->primary_key];
 
 		$this->saveOtherPermissions($id);
+		DB::table('cms_privileges_roles')->where('id_cms_privileges', $id)->delete();
 
 		//set theme 
 		Session::put('theme_color',$this->arr['theme_color']);
@@ -171,7 +172,8 @@ class PrivilegesController extends CBController {
 		$this->validation($id);
 		$this->input_assignment($id);
 
-		$this->saveOtherPermissions($id);		
+		$this->saveOtherPermissions($id);
+		DB::table('cms_privileges_roles')->where('id_cms_privileges', $id)->delete();		
 
 		DB::table($this->table)->where($this->primary_key,$id)->update($this->arr);
 										
@@ -262,6 +264,7 @@ class PrivilegesController extends CBController {
 
 		// add new
 		$insert_array = array();
+		if(isset(request()->other_permissions))
 		foreach (request()->other_permissions as $key => $value) {
 			$insert_array[] = [
 				'cms_privilege_id' => $current_privilege_id,

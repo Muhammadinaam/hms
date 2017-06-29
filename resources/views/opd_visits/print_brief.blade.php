@@ -138,8 +138,16 @@
 				<td class="label">Doctor</td> <td class="info">{{$opd_visit->doctor_name}}</td>
 			</tr>
 			<tr>
-				<td class="label">Fee Received</td> <td class="info">{{$opd_visit->opd_fee}}</td>
+				<td class="label">Doctor Fee</td> <td class="info">{{$opd_visit->opd_fee}}</td>
 			</tr>
+			@if(count($facilities) > 0)
+			<tr>
+				<td class="label">Facilities Charges</td> <td class="info">{{$facilities->sum('sale_price')}}</td>
+			</tr>
+			<tr>
+				<td class="label">Total Charges</td> <td class="info">{{ $facilities->sum('sale_price') + $opd_visit->opd_fee }}</td>
+			</tr>
+			@endif
 		</table>
 
 

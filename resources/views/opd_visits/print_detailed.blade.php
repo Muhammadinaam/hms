@@ -96,6 +96,13 @@
 
 		<br><br>
 
+		<table style="width: 100%;">
+			<tr>
+				<td style="border-color: transparent;">Visit No: <b>{{$opd_visit->id}}</b></td>
+				<td style="text-align: right; border-color: transparent;">Token No: <b>{{$opd_visit->token_number}}</b></td>
+			</tr>
+		</table>
+
 		<table class="patient_info_table">
 			<tr>
 				<td class="table_heading" colspan="2">
@@ -130,18 +137,21 @@
 			<tr>
 				<td>Visit Date</td> <td class="info">{{\Carbon\Carbon::parse($opd_visit->created_at)->format('d-M-Y')}}</td>
 			</tr>
-			<tr>
-				<td>Visit No.</td> <td class="info">{{$opd_visit->id}}</td>
-			</tr>
-			<tr>
-				<td>Token No.</td> <td class="info">{{$opd_visit->token_number}}</td>
-			</tr>
+			
 			<tr>
 				<td>Doctor</td> <td class="info">{{$opd_visit->doctor_name}}<br>{{$opd_visit->doctor_qualification}}</td>
 			</tr>
 			<tr>
-				<td>Fee Received</td> <td class="info">{{$opd_visit->opd_fee}}</td>
+				<td>Doctor Fee</td> <td class="info">{{$opd_visit->opd_fee}}</td>
 			</tr>
+			@if(count($facilities) > 0)
+			<tr>
+				<td class="label">Facilities Charges</td> <td class="info">{{$facilities->sum('sale_price')}}</td>
+			</tr>
+			<tr>
+				<td class="label">Total Charges</td> <td class="info">{{ $facilities->sum('sale_price') + $opd_visit->opd_fee }}</td>
+			</tr>
+			@endif
 		</table>
 
 

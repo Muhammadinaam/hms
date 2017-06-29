@@ -1,3 +1,5 @@
+
+
 <table class="symptoms_diagnosis_medicines_table">
 
 	@if($show_symptoms == 'Yes' && count($symptoms) > 0)
@@ -34,6 +36,7 @@
 	@endif
 
 
+	
 
 	@if(count($facilities))
 	<tr>

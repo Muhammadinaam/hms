@@ -39,6 +39,7 @@
                     @php
                     $active = '';
 
+
                     if( (CRUDBooster::getCurrentMenuId()==$menu->id) && (CRUDBooster::getCurrentDashboardId()!=$menu->id) )
                     {
                         $active = 'active';

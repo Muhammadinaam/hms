@@ -115,6 +115,32 @@
                 </div>
               </form>
             </div>
+         </div> 
+
+         <div class='row'>
+          <div class='col-sm-12'>
+            <div class="box box-primary">
+
+              <div class="box-body">
+
+                  <form method='get' action='' id='form-copy-menu'>
+                    <div class='form-group'>
+                    <label class='label-control'>Copy Menu From Privilege <a href='#' title='Select the privilege from which you want to copy the menu to above privilege'>(?)</a></label>
+                    <select class='form-control' name='id_cms_privileges_copy'>                  
+                        @foreach($privileges as $p)
+                          @if($id_cms_privileges != $p->id)
+                          <option value='{{$p->id}}'>{{$p->name}}</option>
+                          @endif
+                        @endforeach
+                    </select>
+                    </div>
+
+                    <input type="hidden" name="id_cms_privileges" value="{{$id_cms_privileges}}">
+                    <input class="btn btn-primary" type="submit" name="" value="Copy Menu">
+                  </form>
+                </div>
+              </div>
+          </div>
          </div>         
 
          <div class='row'>

@@ -26,7 +26,7 @@
       <input type='hidden' name='return_url' value='{{ @$return_url }}'/>                      
       <input type='hidden' name='ref_mainpath' value='{{ CRUDBooster::mainpath() }}'/>      
       <input type='hidden' name='ref_parameter' value='{{urldecode(http_build_query(@$_GET))}}'/>
-      @if($hide_form)
+      @if($hide_form)
       <input type="hidden" name="hide_form" value='{!! serialize($hide_form) !!}'>
       @endif
       <div class="box-body" id="parent-form-area">

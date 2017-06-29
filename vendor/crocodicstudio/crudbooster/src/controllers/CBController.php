@@ -134,7 +134,7 @@ class CBController extends Controller {
 	public function cbView($template,$data) {
 		$this->cbLoader();
 		//echo view($template,$data);
-		return view($template,compact('data'));
+		return view($template, $data);
 	}
 
 	private function checkHideForm() {
@@ -779,9 +779,20 @@ class CBController extends Controller {
 
 		$request_all = Request::all();
 		$array_input = array();
+
+		$hide_form = (Request::get('hide_form'))?unserialize(Request::get('hide_form')):array();	
+
 		foreach($this->data_inputan as $di) {
 			$ai = array();
 			$name = $di['name'];			
+
+			if($name=='hide_form') continue;
+
+			if(count($hide_form)) {
+				if(in_array($name, $hide_form)) {
+					continue;
+				}
+			}
 
 			//if( !isset($request_all[$name]) ) continue;
 
@@ -790,6 +801,7 @@ class CBController extends Controller {
 					$ai[] = 'required';
 				}
 			}
+
 
 			if($di['type'] == 'upload') {
 				if($id) {

@@ -36,7 +36,6 @@
 			$this->col[] = ["label"=>"Patient NIC","name"=>"patient_id","join"=>"patients,cnic"];
 			$this->col[] = ["label"=>"Token Number","name"=>"token_number"];
 			$this->col[] = ["label"=>"Date Of Visit","name"=>"date_of_visit"];
-			$this->col[] = ["label"=>"Doctor Fee","name"=>"doctor_fee"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE

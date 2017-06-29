@@ -61,10 +61,15 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-{{ trans('crudbooster.left') }}">
-                                <a href="{{ route('AdminCmsUsersControllerGetProfile') }}?m=0" class="btn btn-default btn-flat"><i class='fa fa-user'></i> {{trans("crudbooster.label_button_profile")}}</a>
+                                <a href="{{ route('AdminCmsUsersControllerGetProfile') }}?m=0" class="btn btn-default btn-flat" 
+                                    title="{{trans("crudbooster.label_button_profile")}}"><i class='fa fa-user'></i></a>
+
+                                <a href="{{ route('getChangePassword') }}?m=0" class="btn btn-default btn-flat" 
+                                    title="Change Password"><i class='fa fa-key'></i> </a>
                             </div>
+
                             <div class="pull-{{ trans('crudbooster.right') }}">
-                                <a title='Lock Screen' href="{{ route('getLockScreen') }}" class='btn btn-default btn-flat'><i class='fa fa-key'></i></a> 
+                                <a title='Lock Screen' href="{{ route('getLockScreen') }}" class='btn btn-default btn-flat'><i class='fa fa-lock'></i></a> 
                                 <a href="javascript:void(0)" onclick="swal({   
                                     title: '{{trans('crudbooster.alert_want_to_logout')}}',                                       
                                     type:'info',   

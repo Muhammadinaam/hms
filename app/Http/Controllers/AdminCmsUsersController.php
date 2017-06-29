@@ -44,10 +44,17 @@ class AdminCmsUsersController extends \crocodicstudio\crudbooster\controllers\CB
 		$this->button_show    = FALSE;			
 		$this->button_add     = FALSE;
 		$this->button_delete  = FALSE;	
-		$this->hide_form 	  = ['id_cms_privileges'];
+		$this->hide_form 	  = ['id_cms_privileges', 'password'];
 
 		$data['page_title'] = trans("crudbooster.label_button_profile");
-		$data['row']        = CRUDBooster::first('cms_users',CRUDBooster::myId());		
-		$this->cbView('crudbooster::default.form',$data);				
+		$data['row']        = CRUDBooster::first('cms_users',CRUDBooster::myId());	
+		return $this->cbView('crudbooster::default.form',$data);				
+	}
+
+	public function hook_before_edit(&$arr,$id) {
+		if($arr['password'] == '')
+		{
+			unset($arr['password']);
+		}
 	}
 }

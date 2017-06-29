@@ -158,4 +158,52 @@ class AdminController extends CBController {
 		return redirect()->route('getLogin')->with('message',trans("crudbooster.message_after_logout"));
 	}
 
+	public function getChangePassword()
+	{
+		$header_info['page_title'] = __('Change Password');
+        $header_info['page_icon'] = 'fa fa-key';
+
+        $header_info['breadcrumb_items'] = [
+            [
+                'icon' => $header_info['page_icon'],
+                'name' => $header_info['page_title'],
+                'url' => CRUDbooster::adminPath('admin/dashboard'),
+            ],
+        ];
+
+        return view('crudbooster::change_password',compact('header_info'));
+	}
+
+	public function postChangePassword()
+	{
+
+		$validator = Validator::make(Request::all(),			
+			[
+				'old_password' => 'required',
+				'password' => 'confirmed',
+			]
+		);
+		
+		if ($validator->fails()) 
+		{
+			$message = $validator->errors()->all();
+			return redirect()->back()->with(['message'=>implode(', ',$message),'message_type'=>'danger']);
+		}
+
+		$current_user = DB::table('cms_users')
+							->where('id', CRUDBooster::myId())
+							->first();
+
+		if (Hash::check(request()->old_password, $current_user->password) == false) {
+		    
+		    return redirect()->back()->with(['message'=>'Old password did not match!','message_type'=>'danger']);
+		}
+
+		DB::table('cms_users')
+			->where('id', CRUDBooster::myId())
+			->update(['password'=>Hash::make(request()->password)]);
+
+		return redirect()->back()->with(['message'=>'Password Changed Successfully','message_type'=>'success']);
+	}
+
 }

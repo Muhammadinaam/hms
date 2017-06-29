@@ -173,6 +173,62 @@ use CRUDBooster;
 	  	$id_cms_privileges = ($id_cms_privileges)?:CRUDBooster::myPrivilegeId();
 
 
+
+
+
+	  	if(request()->has('id_cms_privileges_copy'))
+	  	{
+	  		DB::table('cms_menus')
+	  			->where('id_cms_privileges', request()->id_cms_privileges)
+	  			->delete();
+
+	  		//DB::statement("ALTER TABLE cms_menus AUTO_INCREMENT = 1;");
+
+	  		$copy_menus = DB::table('cms_menus')->where('id_cms_privileges', request()->id_cms_privileges_copy)->get();
+
+	  		$max_id = $copy_menus->max('id');
+	  		$copy_menus = $copy_menus->map(function($item, $key)use($max_id){
+	  			$item->id = $max_id + $key + 1;
+	  			$item->id_cms_privileges = request()->id_cms_privileges;
+	  			return $item;
+	  		});
+
+	  		$copy_menus = json_decode(json_encode($copy_menus), TRUE);
+	  		DB::table('cms_menus')->insert($copy_menus);
+
+	  		//update parent ids
+			$child_menus = DB::table('cms_menus')->where('id_cms_privileges', request()->id_cms_privileges)->where('parent_id', '<>', '0')->get();
+			$all_menus = DB::table('cms_menus')->get();
+
+			$child_menus = $child_menus->groupBy('parent_id');
+
+			foreach ($child_menus as $other_parent_menu_id => $child_menu) {
+
+	  			$other_parent_menu = $all_menus->first(function($value, $key)use($child_menu, $other_parent_menu_id){
+	  				
+	  				return $value->id == $other_parent_menu_id && 
+	  						$value->id_cms_privileges == request()->id_cms_privileges_copy;
+	  			});
+
+	  			$own_parent_menu = $all_menus->first(function($value, $key)use($child_menu, $other_parent_menu){
+	  				
+	  				return $value->name == $other_parent_menu->name && 
+	  						$value->id_cms_privileges == request()->id_cms_privileges;
+	  			});
+
+	  			DB::table('cms_menus')
+	  				->where('id_cms_privileges', request()->id_cms_privileges)
+	  				->where('parent_id', $other_parent_menu_id)
+	  				->update(['parent_id'=>$own_parent_menu->id]);
+	  		}	  		
+
+	  	}
+
+
+
+
+
+
 	  	$menu_active = DB::table('cms_menus')
 	  	->where('id_cms_privileges',$id_cms_privileges)
 	  	->where('parent_id',0)
@@ -204,6 +260,8 @@ use CRUDBooster;
 	  	$return_url = Request::fullUrl();
 
 	  	$page_title = 'Menu Management';
+
+
 
 	  	return view('crudbooster::menus_management',compact('menu_active','menu_inactive','privileges','id_cms_privileges','return_url','page_title'));
 	  }

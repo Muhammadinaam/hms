@@ -153,65 +153,73 @@
 							</tbody>
 						</table>
 
+					
+						<hr>
+						<div id='other_permissions' class='form-group'>
+							<label>Other Permissions</label>
+							
+							<table class='table table-striped table-hover table-bordered'>
+								<thead>
+									<tr class='active'>
+										<th width='3%'>{{trans('crudbooster.privileges_module_list_no')}}</th>
+										<th width='60%'>Permission</th>
+										<th>&nbsp;</th>
+									</tr>
+								</thead>
+
+								@php
+								$other_permissions = DB::table('cms_other_permissions')
+									->orderBy('sort', 'asc')
+									->orderBy('permission_group', 'asc')
+									->get();
+
+								$current_privilege_other_permissions = DB::table('cms_privileges_other_permissions')
+									->where('cms_privilege_id', $row->id)
+									->get()->pluck('cms_other_permission_id')->toArray();
+								@endphp
+
+								<tbody>
+
+								@php
+								$current_permission_group = '';
+								@endphp
+
+								@foreach($other_permissions as $other_permission)
+
+								@if($current_permission_group != $other_permission->permission_group)
+								<tr class="danger">
+									<td colspan="8"><b>{{ $other_permission->permission_group != '' ? $other_permission->permission_group : 'Ungrouped Permissions' }}</b></td>
+								</tr>
+									@php
+									$current_permission_group = $other_permission->permission_group;
+									@endphp
+								@endif
+
+								<tr>
+									<td>{{$loop->iteration}}</td>
+									<td>{{$other_permission->name}}</td>
+									<td class="warning" align="center">
+										<input type="checkbox" name="other_permissions[{{$other_permission->id}}]" 
+										{{ in_array($other_permission->id, $current_privilege_other_permissions) ? 'checked' : '' }}>
+									</td>
+								</tr>
+								@endforeach
+								</tbody>
+							</table>
+
+						</div>
+
+
+
+
+
+
 					</div>
 
 
 
 					
-					<hr>
-					<div id='other_permissions' class='form-group'>
-						<label>Other Permissions</label>
-						
-						<table class='table table-striped table-hover table-bordered'>
-							<thead>
-								<tr class='active'>
-									<th width='3%'>{{trans('crudbooster.privileges_module_list_no')}}</th>
-									<th width='60%'>Permission</th>
-									<th>&nbsp;</th>
-								</tr>
-							</thead>
-
-							@php
-							$other_permissions = DB::table('cms_other_permissions')
-								->orderBy('sort', 'asc')
-								->orderBy('permission_group', 'asc')
-								->get();
-
-							$current_privilege_other_permissions = DB::table('cms_privileges_other_permissions')
-								->where('cms_privilege_id', $row->id)
-								->get()->pluck('cms_other_permission_id')->toArray();
-							@endphp
-
-							<tbody>
-
-							@php
-							$current_permission_group = '';
-							@endphp
-
-							@foreach($other_permissions as $other_permission)
-
-							@if($current_permission_group != $other_permission->permission_group)
-							<tr class="danger">
-								<td colspan="8"><b>{{ $other_permission->permission_group != '' ? $other_permission->permission_group : 'Ungrouped Permissions' }}</b></td>
-							</tr>
-								@php
-								$current_permission_group = $other_permission->permission_group;
-								@endphp
-							@endif
-
-							<tr>
-								<td>{{$loop->iteration}}</td>
-								<td>{{$other_permission->name}}</td>
-								<td class="warning" align="center">
-									<input type="checkbox" name="other_permissions[{{$other_permission->id}}]" 
-									{{ in_array($other_permission->id, $current_privilege_other_permissions) ? 'checked' : '' }}>
-								</td>
-							</tr>
-							@endforeach
-							</tbody>
-						</table>
-
-					</div>
+					
 
 
 

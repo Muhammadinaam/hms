@@ -106,7 +106,13 @@ class CRUDBooster  {
 				$resp = response()->json(['message'=>$message,'message_type'=>$type,'redirect_url'=>$to])->send();
 				exit;
 			}else{
-				$resp = redirect($to)->with(['message'=>$message,'message_type'=>$type]);
+
+				if($to != '')
+					$resp = redirect($to);
+				else
+					$resp = redirect()->back();
+
+				$resp = $resp->with(['message'=>$message,'message_type'=>$type]);
 				Session::driver()->save();
 				$resp->send();	
 				exit;
@@ -181,6 +187,19 @@ class CRUDBooster  {
 					}
 				}
 			}
+		}
+
+		public static function hasOtherPermission($permission_group, $permission_name) {		
+			if(self::isSuperadmin()) return true;
+
+			$session = Session::get('admin_other_permissions');
+			
+			if( count( $session->where('permission_group', $permission_group)->where('name', $permission_name) ) > 0 )
+			{
+				return true;
+			}
+			else
+				return false;
 		}
 
 

@@ -28,8 +28,13 @@
 		}
 
 		.symptoms_diagnosis_medicines_table {
-			width: 68%;
-			float: right;
+			width: 100%;
+			border-collapse: collapse;
+			
+		}
+
+		.symptoms_diagnosis_medicines_table td {
+			border: 1px solid black;
 		}
 
 		.table_heading {
@@ -82,7 +87,13 @@
 </head>
 <body>
 
+	@if(file_exists(public_path($header_image)) && $header_image != '')
 	<img src="{{asset($header_image)}}" width="100%">
+	@else
+	<h3 style="color: red">
+		Please go to (Settings > OPD Visit Settings) and set "Header Image".
+	</h3>
+	@endif
 
 	<br>
 
@@ -162,6 +173,9 @@
 </table>
 
 <hr>
+<br><br>
+
+@include('opd_visits.symptoms_diagnosis_medicines_partial')
 
 
 <div class="clear-both"></div>
@@ -174,7 +188,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		window.print();
-		setTimeout("closePrintView()", 3000);
+		setTimeout("closePrintView()", 1000);
 		
 
 	});

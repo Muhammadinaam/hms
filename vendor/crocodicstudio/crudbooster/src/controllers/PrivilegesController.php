@@ -61,7 +61,7 @@ class PrivilegesController extends CBController {
 			DB::raw("(select is_edit from cms_privileges_roles where id_cms_moduls    = cms_moduls.id and id_cms_privileges = '$id') as is_edit"),
 			DB::raw("(select is_delete from cms_privileges_roles where id_cms_moduls  = cms_moduls.id and id_cms_privileges = '$id') as is_delete")
 			)
-		->orderby("name","asc")->orderby("module_group","asc")->get();		
+		->orderby("module_group","asc")->orderby("name","asc")->get();		
 		$data['page_menu'] = Route::getCurrentRoute()->getActionName();
 		return view('crudbooster::privileges',$data);
 	}
@@ -135,6 +135,14 @@ class PrivilegesController extends CBController {
 		->get();
 		Session::put('admin_privileges_roles',$roles);
 
+		$other_permissions = DB::table('cms_privileges_other_permissions')
+		->where('cms_privilege_id',CRUDBooster::myPrivilegeId())
+		->join('cms_other_permissions','cms_other_permissions.id', '=', 'cms_privileges_other_permissions.cms_other_permission_id')
+		->select('cms_other_permissions.permission_group', 'cms_other_permissions.name')
+		->get();
+
+		Session::put('admin_other_permissions',$other_permissions);
+
 		CRUDBooster::redirect(CRUDBooster::mainpath(),trans("crudbooster.alert_add_data_success"),'success');		
 	}
 	
@@ -154,7 +162,7 @@ class PrivilegesController extends CBController {
 		$moduls = DB::table("cms_moduls")
 		->where('is_protected',0)
 		->select("cms_moduls.*")
-		->orderby("name","asc")->orderby("module_group","asc")->get();
+		->orderby("module_group","asc")->orderby("name","asc")->get();
 		$page_menu = Route::getCurrentRoute()->getActionName();
 		return view('crudbooster::privileges',compact('row','page_title','moduls','page_menu'));
 	}
@@ -250,6 +258,14 @@ class PrivilegesController extends CBController {
 			->select('cms_moduls.name','cms_moduls.path','is_visible','is_create','is_read','is_edit','is_delete')
 			->get();
 			Session::put('admin_privileges_roles',$roles);
+
+			$other_permissions = DB::table('cms_privileges_other_permissions')
+		->where('cms_privilege_id',CRUDBooster::myPrivilegeId())
+		->join('cms_other_permissions','cms_other_permissions.id', '=', 'cms_privileges_other_permissions.cms_other_permission_id')
+		->select('cms_other_permissions.permission_group', 'cms_other_permissions.name')
+		->get();
+
+		Session::put('admin_other_permissions',$other_permissions);
 
 			Session::put('theme_color',$this->arr['theme_color']);
 		}		

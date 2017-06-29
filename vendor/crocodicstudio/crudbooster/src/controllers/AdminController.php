@@ -80,6 +80,17 @@ class AdminController extends CBController {
 			->join('cms_moduls','cms_moduls.id','=','id_cms_moduls')
 			->select('cms_moduls.name','cms_moduls.path','is_visible','is_create','is_read','is_edit','is_delete')
 			->get();
+
+			$other_permissions = DB::table('cms_privileges_other_permissions')
+		->where('cms_privilege_id',$users->id_cms_privileges)
+		->join('cms_other_permissions','cms_other_permissions.id', '=', 'cms_privileges_other_permissions.cms_other_permission_id')
+		->select('cms_other_permissions.permission_group', 'cms_other_permissions.name')
+		->get();
+
+
+		Session::put('admin_other_permissions',$other_permissions);
+
+			
 			
 			$photo = ($users->photo)?asset($users->photo):'https://www.gravatar.com/avatar/'.md5($users->email).'?s=100';
 			Session::put('admin_id',$users->id);			
@@ -87,6 +98,7 @@ class AdminController extends CBController {
 			Session::put('admin_name',$users->name);	
 			Session::put('admin_photo',$photo);
 			Session::put('admin_privileges_roles',$roles);
+			Session::put('admin_other_permissions',$other_permissions);
 			Session::put("admin_privileges",$users->id_cms_privileges);
 			Session::put('admin_privileges_name',$priv->name);			
 			Session::put('admin_lock',0);

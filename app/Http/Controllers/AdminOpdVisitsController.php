@@ -559,6 +559,21 @@
 			->where('group_setting', 'OPD Visit Settings')
 			->first()->content;
 
+			$symptoms = DB::table('opd_visit_symptoms')
+							->join('symptoms', 'symptoms.id', '=', 'opd_visit_symptoms.symptom_id')
+							->where('opd_visit_symptoms.opd_visit_id', $id)
+							->get();
+
+			$diagnoses = DB::table('opd_visit_diagnoses')
+							->join('diagnoses', 'diagnoses.id', '=', 'opd_visit_diagnoses.diagnosis_id')
+							->where('opd_visit_diagnoses.opd_visit_id', $id)
+							->get();
+
+			$facilities = DB::table('opd_visit_facilities')
+							->join('facilities', 'facilities.id', '=', 'opd_visit_facilities.facility_id')
+							->where('opd_visit_facilities.opd_visit_id', $id)
+							->get();
+
 			//get print page size
 			$page_size = DB::table('cms_settings')
 			->where('name', 'print_size')
@@ -574,7 +589,10 @@
 				$view = 'opd_visits.print_detailed';
 			}
 
-			return view($view, compact('header_image', 'opd_visit'));
+			$show_symptoms = DB::table('cms_settings')->where('name','show_symptoms_in_opd_visit')->where('group_setting','OPD Visit Settings')->first()->content;
+			$show_diagnoses = DB::table('cms_settings')->where('name','show_diagnoses_in_opd_visit')->where('group_setting','OPD Visit Settings')->first()->content;
+
+			return view($view, compact('header_image', 'opd_visit', 'symptoms', 'diagnoses', 'facilities', 'show_symptoms', 'show_diagnoses'));
 		}
 
 

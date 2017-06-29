@@ -54,6 +54,7 @@ return [
 
     'alert_delete_selected'         => 'هل آنت متآكد من حئف كافة البيانات المحددة ?',
     'alert_delete_selected_success' => 'البيانات المحددة تم حذفها بنجاح !',
+    'alert_no_item_selected'        => 'No item was selected',
     'alert_action'                  => 'تم :action بنجاح !',
     'alert_add_data_success'        => 'تم اضافة البيانات !',
     'alert_add_data_failed'         => 'فشل حفظ البيانات !',

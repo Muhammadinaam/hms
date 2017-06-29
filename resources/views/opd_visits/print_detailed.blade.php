@@ -86,7 +86,13 @@
 
 	<page>
 
+		@if(file_exists(public_path($header_image)) && $header_image != '')
 		<img src="{{asset($header_image)}}" width="100%">
+		@else
+		<h3 style="color: red">
+			Please go to (Settings > OPD Visit Settings) and set "Header Image".
+		</h3>
+		@endif
 
 		<br><br>
 
@@ -175,53 +181,11 @@
 
 		</table>
 
-		<table class="symptoms_diagnosis_medicines_table">
-			<tr>
-				<td class="table_heading" colspan="2">
-					Symptoms
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					&nbsp;
-				</td>
-			</tr>
-
-			<tr>
-				<td class="table_heading" colspan="2">
-					Diagnosis
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					&nbsp;
-				</td>
-			</tr>
-
-			<tr>
-				<td class="table_heading" colspan="2">
-					Clinic Medicines
-				</td>
-			</tr>
-
-			@for($i = 0; $i < 5; $i++)
-			<tr>
-				<td>&nbsp;</td> <td>&nbsp;</td>
-			</tr>
-			@endfor
 
 
-			<tr>
-				<td class="table_heading" colspan="2">
-					Medicines From Outsides
-				</td>
-			</tr>
-			@for($i = 0; $i < 5; $i++)
-			<tr>
-				<td>&nbsp;</td> <td>&nbsp;</td>
-			</tr>
-			@endfor
-		</table>
+		@include('opd_visits.symptoms_diagnosis_medicines_partial')
+
+		
 
 		<div class="clear-both"></div>
 
@@ -237,7 +201,7 @@
 
 		$(document).ready(function(){
 			window.print();
-			setTimeout("closePrintView()", 3000);
+			setTimeout("closePrintView()", 1000);
 			
 
 		});

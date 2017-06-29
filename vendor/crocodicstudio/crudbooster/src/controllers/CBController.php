@@ -1651,6 +1651,13 @@ class CBController extends Controller {
 	public function postActionSelected() {
 		$this->cbLoader();
 		$id_selected = Request::input('checkbox');
+
+		if($id_selected == null)
+		{
+			$message = trans("crudbooster.alert_no_item_selected");
+			return redirect()->back()->with(['message_type'=>'warning','message'=>$message]);
+		}
+
 		$button_name = Request::input('button_name');
 
 		if($button_name == 'delete') {
@@ -1659,6 +1666,7 @@ class CBController extends Controller {
 				CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 			}
 
+			
 			$this->hook_before_delete($id_selected);
 			$tablePK = CB::pk($this->table);
 			if(CRUDBooster::isColumnExists($this->table,'deleted_at')) {

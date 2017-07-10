@@ -134,7 +134,7 @@ class CBController extends Controller {
 	public function cbView($template,$data) {
 		$this->cbLoader();
 		//echo view($template,$data);
-		return view($template, $data);
+		return view($template, compact('data'));
 	}
 
 	private function checkHideForm() {
@@ -156,6 +156,7 @@ class CBController extends Controller {
 			CRUDBooster::insertLog(trans('crudbooster.log_try_view',['module'=>$module->name]));
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 		}
+
 
 		if(Request::get('parent_table')) {
 			$parentTablePK = CB::pk(g('parent_table'));

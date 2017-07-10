@@ -16,7 +16,16 @@ class AdminController extends CBController {
 		
 		$dashboard = CRUDBooster::sidebarDashboard();		
 		if($dashboard && $dashboard->url) {
-			return redirect($dashboard->url);
+
+			$resp = redirect($dashboard->url); 
+
+			if(session()->has('message'))
+			{
+				$resp = 
+				$resp->with(['message'=>session()->get('message'),'message_type'=>session()->get('message_type')]);
+			}
+
+			return $resp;
 		}
 		$data = array();			
 		$data['page_title']       = '<strong>Dashboard</strong>';		

@@ -66,7 +66,8 @@ class SettingsController extends CBController {
 	function getShow() {
 		$this->cbLoader();
 
-		if(!CRUDBooster::isSuperadmin()) {
+
+		if(!CRUDBooster::isSuperadmin() && !CRUDBooster::hasOtherPermission('Settings', Request::get('group'))) {
 			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Setting','module'=>'Setting']));
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 		}
@@ -90,7 +91,7 @@ class SettingsController extends CBController {
 
 	function postSaveSetting() {
 
-		if(!CRUDBooster::isSuperadmin()) {
+		if(!CRUDBooster::isSuperadmin() && !CRUDBooster::hasOtherPermission('Settings', Request::get('group'))) {
 			CRUDBooster::insertLog(trans("crudbooster.log_try_view",['name'=>'Setting','module'=>'Setting']));
 			CRUDBooster::redirect(CRUDBooster::adminPath(),trans('crudbooster.denied_access'));
 		}

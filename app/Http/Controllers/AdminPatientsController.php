@@ -42,12 +42,12 @@
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-			$this->form[] = ['label'=>'Guardian Name','name'=>'guardian_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Gender','name'=>'gender','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-10','dataenum'=>'Male;Female;Other'];
-			$this->form[] = ['label'=>'CNIC / Passport','name'=>'cnic','type'=>'number','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Phone','name'=>'phone','type'=>'number','validation'=>'required|numeric','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Address','name'=>'address','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Age (Years)','name'=>'age','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Guardian Name','name'=>'guardian_name','type'=>'text','validation'=>'max:255','width'=>'col-sm-10','dataenum'=>'Male;Female;Other'];
+			$this->form[] = ['label'=>'Gender','name'=>'gender','type'=>'select','validation'=>'max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'CNIC / Passport','name'=>'cnic','type'=>'number','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Phone','name'=>'phone','type'=>'number','validation'=>'numeric','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Address','name'=>'address','type'=>'textarea','validation'=>'max:255','width'=>'col-sm-10'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -55,7 +55,7 @@
 			//$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
 			//$this->form[] = ['label'=>'Guardian Name','name'=>'guardian_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Gender','name'=>'gender','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-10','dataenum'=>'Male;Female;Other'];
-			//$this->form[] = ['label'=>'CNIC / Passport','name'=>'cnic','type'=>'number','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			//$this->form[] = ['label'=>'CNIC / Passport','name'=>'cnic','type'=>'number','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Phone','name'=>'phone','type'=>'number','validation'=>'required|numeric','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Address','name'=>'address','type'=>'textarea','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Age (Years)','name'=>'age','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];

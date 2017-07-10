@@ -207,13 +207,14 @@ use CRUDBooster;
 	  			$other_parent_menu = $all_menus->first(function($value, $key)use($child_menu, $other_parent_menu_id){
 	  				
 	  				return $value->id == $other_parent_menu_id && 
-	  						$value->id_cms_privileges == request()->id_cms_privileges_copy;
+	  						$value->id_cms_privileges == request()->id_cms_privileges_copy;;
 	  			});
 
 	  			$own_parent_menu = $all_menus->first(function($value, $key)use($child_menu, $other_parent_menu){
 	  				
 	  				return $value->name == $other_parent_menu->name && 
-	  						$value->id_cms_privileges == request()->id_cms_privileges;
+	  						$value->id_cms_privileges == request()->id_cms_privileges &&
+	  						($value->parent_id == 0 || $value->parent_id == '');
 	  			});
 
 	  			DB::table('cms_menus')

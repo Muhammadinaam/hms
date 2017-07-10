@@ -71,6 +71,27 @@
                 @endforeach
 
 
+                <li class="header">{{ __('Settings') }}</li>
+                <li class="treeview">
+                    <a href="#"><i class='fa fa-wrench'></i> <span>{{ trans('crudbooster.settings') }}</span> <i class="fa fa-angle-{{ trans("crudbooster.right") }} pull-{{ trans("crudbooster.right") }}"></i></a>
+                    <ul class="treeview-menu">
+                        
+                        @if( CRUDBooster::isSuperadmin() )
+                        <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/settings/add*')) ? 'active' : '' }}"><a href='{{route("SettingsControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> {{ trans('crudbooster.Add_New_Setting') }}</a></li>
+                        @endif
+
+                        <?php
+                        $groupSetting = DB::table('cms_settings')->groupby('group_setting')->pluck('group_setting');
+                        foreach($groupSetting as $gs):
+                        ?>
+
+                        @if( CRUDBooster::hasOtherPermission('Settings', $gs) )
+                        <li class="<?=($gs == Request::get('group'))?'active':''?>"><a href='{{route("SettingsControllerGetShow")}}?group={{urlencode($gs)}}&m=0'><i class='fa fa-wrench'></i> {{$gs}}</a></li>
+                        @endif
+
+                        <?php endforeach;?>
+                    </ul>
+                </li>
 
                 @if(CRUDBooster::isSuperadmin())
                     <li class="header">{{ trans('crudbooster.SUPERADMIN') }}</li>
@@ -91,18 +112,7 @@
                     </li>
 
                     <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/menu_management*')) ? 'active' : '' }}"><a href='{{Route("MenusControllerGetIndex")}}?m=0'><i class='fa fa-bars'></i> {{ trans('crudbooster.Menu_Management') }}</a></li>
-                    <li class="treeview">
-                        <a href="#"><i class='fa fa-wrench'></i> <span>{{ trans('crudbooster.settings') }}</span> <i class="fa fa-angle-{{ trans("crudbooster.right") }} pull-{{ trans("crudbooster.right") }}"></i></a>
-                        <ul class="treeview-menu">
-                            <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/settings/add*')) ? 'active' : '' }}"><a href='{{route("SettingsControllerGetAdd")}}?m=0'><i class='fa fa-plus'></i> {{ trans('crudbooster.Add_New_Setting') }}</a></li>
-                            <?php
-                            $groupSetting = DB::table('cms_settings')->groupby('group_setting')->pluck('group_setting');
-                            foreach($groupSetting as $gs):
-                            ?>
-                            <li class="<?=($gs == Request::get('group'))?'active':''?>"><a href='{{route("SettingsControllerGetShow")}}?group={{urlencode($gs)}}&m=0'><i class='fa fa-wrench'></i> {{$gs}}</a></li>
-                            <?php endforeach;?>
-                        </ul>
-                    </li>
+                    
                     <li class='treeview'>
                         <a href='#'><i class='fa fa-th'></i> <span>{{ trans('crudbooster.Module_Generator') }}</span>  <i class="fa fa-angle-{{ trans("crudbooster.right") }} pull-{{ trans("crudbooster.right") }}"></i></a>
                         <ul class='treeview-menu'>
